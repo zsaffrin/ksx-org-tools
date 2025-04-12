@@ -23,10 +23,10 @@ const App = () => {
   
   return (
     <div className="app-layout">
-        <h1>KSX Org Tools</h1>
-        <button type="button" onClick={refreshTabData}>refreshTabData</button>
-        <div>{val}</div>
-        <Pages />
+      <h1>KSX Org Tools</h1>
+      <button type="button" onClick={refreshTabData}>refreshTabData</button>
+      <div>{val}</div>
+      <Pages />
     </div>
   );
 };

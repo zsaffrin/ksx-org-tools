@@ -19,11 +19,13 @@ html {
   --space-md: 0.5rem;
   --space-lg: 1rem;
   --space-xl: 2rem;
+
+  --color-body-text: #082a35;
 }
 
 body {
   background: #d9dbf1;
-  color: #082a35;
+  color: var(--color-body-text);
   font-size: 14px;
   margin: 0;
 }
@@ -39,8 +41,10 @@ h6 {
 }
 
 .app-layout {
+  border: 1px solid var(--color-body-text);
   display: grid;
   padding: var(--space-md);
   grid-gap: var(--space-md);
   justify-items: start;
+  min-width: 40rem;
 }
