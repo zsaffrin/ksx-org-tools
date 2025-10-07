@@ -10,11 +10,6 @@ const App = () => {
   return (
     <div className="app-layout">
       <h1>KSX Org Tools</h1>
-<<<<<<< HEAD
-      <button type="button" onClick={refreshTabData}>refreshTabData</button>
-      <div>{val}</div>
-      <Pages />
-=======
       {
         isSalesforceDomain ? [
           <Debug />,
@@ -26,7 +21,6 @@ const App = () => {
           </div>
         )
       }
->>>>>>> 84ebd8c (Get URL extraction working)
     </div>
   );
 };
