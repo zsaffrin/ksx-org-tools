@@ -1,0 +1,6 @@
+.actions-layout {
+  display: grid;
+  padding: var(--space-sm);
+  grid-gap: var(--space-sm);
+  justify-items: start;
+}

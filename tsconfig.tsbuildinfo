@@ -1,0 +1,1 @@
+{"root":["./src/main.tsx","./src/vite-env.d.ts","./src/components/app/app.tsx","./src/components/app/actions/actions.tsx","./src/components/app/debug/debug.tsx","./src/components/app/pages/pages.tsx","./src/hooks/usetabdata.tsx"],"errors":true,"version":"5.7.3"}

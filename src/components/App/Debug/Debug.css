@@ -1,0 +1,11 @@
+.debug-layout {
+  display: grid;
+  padding: var(--space-sm);
+  grid-gap: var(--space-sm);
+  justify-items: start;
+}
+
+.codeblock {
+  font-family: monospace;
+  word-wrap: break-word;
+}
