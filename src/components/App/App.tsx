@@ -5,13 +5,13 @@ import Pages from './Pages/Pages';
 import './App.css';
 
 const App = () => {
-  const { isSalesforceDomain } = useTabData();
+  const { isSalesforce } = useTabData();
   
   return (
     <div className="app-layout">
       <h1>KSX Org Tools</h1>
       {
-        isSalesforceDomain ? [
+        isSalesforce ? [
           <Debug />,
           <Actions />,
           <Pages />,
