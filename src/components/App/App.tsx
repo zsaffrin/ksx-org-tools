@@ -1,17 +1,25 @@
-// import useUrlParams from '../../hooks/useUrlParams';
+import useUrlParams from '../../hooks/useUrlParams';
 import Info from './Info/Info';
 import Actions from './Actions/Actions';
+import Pages from './Pages/Pages';
 // import Debug from './Debug/Debug';
 import './App.css';
 
 const App = () => {
-  // const { isSalesforce } = useUrlParams();
+  const { isSalesforce } = useUrlParams();
   
   return (
     <div className="app-layout">
       <h1>KSX Org Tools</h1>
-      <Info />
-      <Actions />
+      {isSalesforce ? (
+        <>
+          <Info />
+          <Actions />
+          <Pages />
+        </>
+      ) : (
+        <div>Not a Salesforce org url</div>
+      )}
       {/* <Debug /> */}
     </div>
   );
