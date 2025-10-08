@@ -46,9 +46,5 @@ h6 {
   padding: var(--space-md);
   grid-gap: var(--space-md);
   justify-items: start;
-<<<<<<< HEAD
-  min-width: 40rem;
-=======
   width: 48rem;
->>>>>>> 84ebd8c (Get URL extraction working)
 }
