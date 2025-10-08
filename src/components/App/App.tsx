@@ -1,11 +1,9 @@
-import useTabData from '../../hooks/useTabData';
+import useUrlParams from '../../hooks/useUrlParams';
 import Debug from './Debug/Debug';
-import Actions from './Actions/Actions';
-import Pages from './Pages/Pages';
 import './App.css';
 
 const App = () => {
-  const { isSalesforce } = useTabData();
+  const { isSalesforce } = useUrlParams();
   
   return (
     <div className="app-layout">
@@ -13,8 +11,6 @@ const App = () => {
       {
         isSalesforce ? [
           <Debug />,
-          <Actions />,
-          <Pages />,
         ] : (
           <div>
             Not a Salesforce URL
