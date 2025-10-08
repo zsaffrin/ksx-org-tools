@@ -63,9 +63,9 @@ const getParamsFromUrl = (url?: string | null) => {
         const oneAddressParts = paramData.oneBlobDecoded.attributes.address.split('/');
         if (oneAddressParts[3] == 'apex') {
           paramData.pageType = 'apex';
-          const [ apexPage, ...apexArgs ] = oneAddressParts[4].split('?');
-          paramData.apexPage = apexPage;
-          paramData.apexArgs = apexArgs.reduce<ApexArgs>((acc, arg) => {
+          const apexParts = oneAddressParts[4].split('?');
+          paramData.apexPage = apexParts[0];
+          paramData.apexArgs = apexParts[1].split('&').reduce<ApexArgs>((acc, arg) => {
             const argParts = arg.split('=');
             return ({
               ...acc,
