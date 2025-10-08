@@ -72,7 +72,7 @@ const useTabData = () => {
     }
   };
   
-  return (tabData);
+  return tabData;
 };
 
 export default useTabData;
