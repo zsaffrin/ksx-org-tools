@@ -13,20 +13,6 @@ interface ParamData {
   recordId?: string | null,
 };
 
-const getTabData = async () => {
-  if (chrome && chrome.tabs) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (!tabs || tabs.length < 1) {
-        return;
-      }
-      
-      return tabs[0];
-    });
-  }
-
-  return;
-};
-
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
@@ -58,13 +44,20 @@ const useUrlParams = () => {
     }
   }, [currentTabData]);
 
-  const refreshTabData = () => {
-    getTabData().then((tabData: ChromeTabData | void) => {
-      setCurrentTabData(tabData);
-      const params = getParamsFromUrl(currentTabData?.url);
-      setParamData(params);
-    });
-    
+  const refreshTabData = async () => {
+    if (chrome && chrome.tabs) {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (!tabs || tabs.length < 1) {
+          return;
+        }
+        
+        const tabData = tabs[0];
+        setCurrentTabData(tabData);
+
+        const params = getParamsFromUrl(tabData?.url);
+        setParamData(params);
+      });
+    }
   };
   
   return paramData;
