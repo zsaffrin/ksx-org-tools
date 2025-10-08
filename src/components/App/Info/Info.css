@@ -1,0 +1,28 @@
+.info-layout {
+  display: grid;
+  padding: var(--space-sm);
+  grid-gap: var(--space-sm);
+  justify-items: start;
+}
+
+.info-facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-gap: var(--space-md);
+}
+
+.info-fact-label {
+  font-weight: bold;
+}
+
+.info-subfacts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-gap: var(--space-sm);
+  font-size: 0.8em;
+  padding: var(--space-thin) 0;
+}
+
+.info-subfact-label {
+  font-weight: bold;
+}
