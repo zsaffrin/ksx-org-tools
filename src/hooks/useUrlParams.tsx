@@ -4,6 +4,18 @@ interface ChromeTabData {
   url?: string | null,
 };
 
+interface OneUrlBlobData {
+  componentDef?: string | null,
+  attributes?: {
+    address?: string | null,
+  } | null,
+  state?: string | null,
+}
+
+interface ApexArgs {
+  [key: string]: string | null,
+}
+
 interface ParamData {
   url?: string | null,
   domain?: string | null,
@@ -11,11 +23,17 @@ interface ParamData {
   pageType?: string | null,
   sObject?: string | null,
   recordId?: string | null,
+  oneBlob?: string | null,
+  oneBlobDecoded?: OneUrlBlobData | null,
+  apexPage?: string | null,
+  apexArgs?: ApexArgs | null,
 };
 
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
+    isSalesforce: false,
+    pageType: 'unknown',
   };
   
   if (url && url.length > 1) {
@@ -26,9 +44,41 @@ const getParamsFromUrl = (url?: string | null) => {
 
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
-    paramData.pageType = urlParts[4];
-    paramData.sObject = urlParts[5];
-    paramData.recordId = urlParts[6];
+    if (urlParts[3] == 'lightning') {
+      if (urlParts[4] == 'o') {
+        paramData.pageType = 'object';
+      }
+      if (urlParts[4] == 'r') {
+        paramData.pageType = 'record';
+      }
+      paramData.sObject = urlParts[5];
+      paramData.recordId = urlParts[6];
+    }
+    if (urlParts[3] == 'one') {
+      const oneBlobParts = urlParts[4].split('#');
+      paramData.oneBlob = oneBlobParts[1];
+      paramData.oneBlobDecoded = JSON.parse(atob(decodeURIComponent(oneBlobParts[1])));
+
+      if (paramData.oneBlobDecoded?.attributes?.address) {
+        const oneAddressParts = paramData.oneBlobDecoded.attributes.address.split('/');
+        if (oneAddressParts[3] == 'apex') {
+          paramData.pageType = 'apex';
+          const [ apexPage, ...apexArgs ] = oneAddressParts[4].split('?');
+          paramData.apexPage = apexPage;
+          paramData.apexArgs = apexArgs.reduce<ApexArgs>((acc, arg) => {
+            const argParts = arg.split('=');
+            return ({
+              ...acc,
+              [argParts[0]]: argParts[1],
+            });
+          }, {});
+          if (paramData.apexArgs?.id) {
+            paramData.recordId = paramData.apexArgs.id;
+          }
+        }
+      }
+    }
+
   }
 
   return paramData;
