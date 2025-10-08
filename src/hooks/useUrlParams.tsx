@@ -65,7 +65,7 @@ const getParamsFromUrl = (url?: string | null) => {
           paramData.pageType = 'apex';
           const apexParts = oneAddressParts[4].split('?');
           paramData.apexPage = apexParts[0];
-          paramData.apexArgs = apexParts[1].split('&').reduce<ApexArgs>((acc, arg) => {
+          paramData.apexArgs = apexParts[1]?.split('&').reduce<ApexArgs>((acc, arg) => {
             const argParts = arg.split('=');
             return ({
               ...acc,
@@ -77,6 +77,9 @@ const getParamsFromUrl = (url?: string | null) => {
           }
         }
       }
+    }
+    if (urlParts[4] == 'setup') {
+      paramData.pageType = 'setup';
     }
 
   }
