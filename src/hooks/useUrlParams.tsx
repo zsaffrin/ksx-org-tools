@@ -50,9 +50,9 @@ const getParamsFromUrl = (url?: string | null) => {
       }
       if (urlParts[4] == 'r') {
         paramData.pageType = 'record';
+        paramData.recordId = urlParts[6];
       }
       paramData.sObject = urlParts[5];
-      paramData.recordId = urlParts[6];
     }
     if (urlParts[3] == 'one') {
       const oneBlobParts = urlParts[4].split('#');
