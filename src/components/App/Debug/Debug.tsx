@@ -1,14 +1,14 @@
-import useTabData from '../../../hooks/useTabData';
+import useUrlParams from '../../../hooks/useUrlParams';
 import './Debug.css';
 
 const Debug = () => {
-  const tabData = useTabData();
+  const params = useUrlParams();
 
   return (
     <div className="debug-layout">
       <h2>Debug</h2>
       <div className="codeblock">
-        <pre>{JSON.stringify(tabData, null, 2)}</pre>
+        <pre>{JSON.stringify(params, null, 2)}</pre>
       </div>
     </div>
   );
