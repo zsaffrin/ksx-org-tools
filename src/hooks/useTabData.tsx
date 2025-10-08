@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { isSalesforceUrl } from '../utilities';
 
 interface TabData {
   url?: string | null,
@@ -22,18 +23,6 @@ const useTabData = () => {
     }
   }, [tabData]);
 
-  const isSalesforceUrl = (url: string) => {
-    if (url) {
-      const hasSalesforceTLD = url.includes('.force.com');
-  
-      if (hasSalesforceTLD) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
   const extractInfoFromUrl = (url: string | null) => {
     const pageInfo: TabData = {
       domain: null,
@@ -48,23 +37,11 @@ const useTabData = () => {
       
       pageInfo.domain = splitUrl[2];
       
-      const typeParam = splitUrl[4];
+      pageInfo.pageType = splitUrl[4];
+      pageInfo.sObject = splitUrl[5];
 
-      switch (typeParam) {
-        case 'o':
-          pageInfo.pageType = 'object';
-          break;
-        case 'r':
-          pageInfo.pageType = 'record';
-          break;
-      }
-
-      if (pageInfo.pageType) {
-        pageInfo.sObject = splitUrl[5];
-
-        if (pageInfo.pageType == 'r') {
-          pageInfo.recordId = splitUrl[6];
-        }
+      if (pageInfo.pageType == 'r') {
+        pageInfo.recordId = splitUrl[6];
       }
 
       if (isSalesforceUrl(url)) {
