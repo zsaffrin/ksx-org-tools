@@ -34,12 +34,14 @@ const Info = () => {
 
   return (
     <div className="info-layout">
+      <div className="info-facts">
       {facts.map(({ label, content }) => (
-        <div className="info-facts">
+        <>
           <div className="info-fact-label">{label}</div>
           <div className="info-fact-content">{content}</div>
-        </div>
+        </>
       ))}
+      </div>
     </div>
   );
 };
