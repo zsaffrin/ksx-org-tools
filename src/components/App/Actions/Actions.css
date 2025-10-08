@@ -1,6 +1,21 @@
 .actions-layout {
   display: grid;
   padding: var(--space-sm);
+  grid-gap: var(--space-md);
+  justify-items: start;
+}
+
+.record-opener {
+  display: grid;
+  padding: var(--space-sm);
   grid-gap: var(--space-sm);
   justify-items: start;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+}
+
+.record-opener-label {
+  font-weight: bold;
+  font-size: 0.85em;
 }
