@@ -8,7 +8,7 @@ const Debug = () => {
     <div className="debug-layout">
       <h2>Debug</h2>
       <div className="codeblock">
-        {JSON.stringify(tabData)}
+        <pre>{JSON.stringify(tabData, null, 2)}</pre>
       </div>
     </div>
   );

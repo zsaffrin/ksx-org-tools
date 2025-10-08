@@ -5,7 +5,10 @@
   justify-items: start;
 }
 
-.codeblock {
+.codeblock pre {
   font-family: monospace;
+  font-size: 10px;
+  white-space: pre-wrap;
   word-wrap: break-word;
+  max-width: 42em;
 }
