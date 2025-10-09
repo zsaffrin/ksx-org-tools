@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import useUrlParams from '../../../hooks/useUrlParams';
-import { openNewPage } from '../../../utilities';
+import { openNewPage, redirectPage } from '../../../utilities';
 import './Actions.css';
 
 const Actions = () => {
   const [targetRecordId, setTargetRecordId] = useState<string>('');
   const [objectSearchTerm, setObjectSearchTerm] = useState<string>('');
   const params = useUrlParams();
-
-  const showRecordActions = !!params.recordId;
 
   const handleTargetRecordIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTargetRecordId(e.currentTarget.value);
@@ -17,15 +15,32 @@ const Actions = () => {
     setObjectSearchTerm(e.currentTarget.value);
   };
 
+  const constructThreadsTargetString = () => {
+    const joiner = params.apexArgs
+      ? '&'
+      : '?';
+    return `${params.url}` + joiner + 'threads=10';
+  };
+
   return (
     <div className="actions-layout">
-      {showRecordActions && (
+      {!!params.recordId && (
         <div>
           <button
             type='button'
             onClick={() => openNewPage(params.domain, `/${params.recordId}?nooverride=1`)}
           >
-            Open Current Page with No-override
+            Open Current Record with No-override
+          </button>
+        </div>
+      )}
+      {params.apexPage == 'JobsPending' && (
+        <div>
+          <button
+            type='button'
+            onClick={() => redirectPage(constructThreadsTargetString())}
+          >
+            threads=10
           </button>
         </div>
       )}
