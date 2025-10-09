@@ -1,5 +1,6 @@
 import useUrlParams from '../../../hooks/useUrlParams';
 import { openNewPage } from '../../../utilities';
+import { Button } from '../../ui';
 import './Pages.css';
 
 const Pages = () => {
@@ -22,12 +23,10 @@ const Pages = () => {
   ];
 
   const targetNodes = targets.map(({ title, target }) => (
-    <button
-      type='button'
-      onClick={() => openNewPage(params.domain, target)}
-    >
-      {title}
-    </button>
+    <Button
+      title={title}
+      action={() => openNewPage(params.domain, target)}
+    />
   ));
   
   return (

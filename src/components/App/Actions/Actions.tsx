@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useUrlParams from '../../../hooks/useUrlParams';
 import { openNewPage, redirectPage } from '../../../utilities';
+import { Button } from '../../ui';
 import './Actions.css';
 
 const Actions = () => {
@@ -26,38 +27,30 @@ const Actions = () => {
     <div className="actions-layout">
       {params.recordId && (
         <div className="two-column-grid">
-          <button
-            type='button'
-            onClick={() => openNewPage(params.domain, `/${params.recordId}`)}
-          >
-            Open Current Record
-          </button>
-          <button
-            type='button'
-            onClick={() => openNewPage(params.domain, `/${params.recordId}?nooverride=1`)}
-          >
-            {'Open Current Record w/No-override'}
-          </button>
+          <Button
+            title='Open Current Record'
+            action={() => openNewPage(params.domain, `/${params.recordId}`)}
+          />
+          <Button
+            title='Open Current Record w/No-override'
+            action={() => openNewPage(params.domain, `/${params.recordId}?nooverride=1`)}
+          />
         </div>
       )}
       {params.apexPage == 'JobsPending' && (
         <div>
-          <button
-            type='button'
-            onClick={() => redirectPage(constructThreadsTargetString())}
-          >
-            threads=10
-          </button>
+          <Button
+            title='threads=10'
+            action={() => redirectPage(constructThreadsTargetString())}
+          />
         </div>
       )}
       {params.sObject == 'KimbleOne__ActivityAssignment__c' && params.recordId && (
         <div>
-          <button
-            type='button'
-            onClick={() => openNewPage(params.domain, `/apex/KimbleOne__ActivityAssignmentRates?id=${params.recordId}`)}
-          >
-            Open Assignment Usage Pattern
-          </button>
+          <Button
+            title='Open Assignment Usage Pattern'
+            action={() => openNewPage(params.domain, `/apex/KimbleOne__ActivityAssignmentRates?id=${params.recordId}`)}
+          />
         </div>
       )}
       <div className="record-opener">
@@ -70,18 +63,14 @@ const Actions = () => {
           value={targetRecordId}
           onChange={handleTargetRecordIdChange}
         />
-        <button
-          type='button'
-          onClick={() => openNewPage(params.domain, `/${targetRecordId}`)}
-        >
-          Open
-        </button>
-        <button
-          type='button'
-          onClick={() => openNewPage(params.domain, `/${targetRecordId}?nooverride=1`)}
-        >
-          Open w/No-override
-        </button>
+        <Button
+          title='Open'
+          action={() => openNewPage(params.domain, `/${targetRecordId}`)}
+        />
+        <Button
+          title='Open w/No-override'
+          action={() => openNewPage(params.domain, `/${targetRecordId}?nooverride=1`)}
+        />
       </div>
       <div className="record-opener">
         <input
@@ -90,12 +79,10 @@ const Actions = () => {
           value={objectSearchTerm}
           onChange={handleObjectSearchTermChange}
         />
-        <button
-          type='button'
-          onClick={() => openNewPage(params.domain, `/apex/KimbleOne__ObjectLinks?f=${objectSearchTerm}`)}
-        >
-          Search ObjectLinks
-        </button>
+        <Button
+          title='Search ObjectLinks'
+          action={() => openNewPage(params.domain, `/apex/KimbleOne__ObjectLinks?f=${objectSearchTerm}`)}
+        />
       </div>
     </div>
   );
