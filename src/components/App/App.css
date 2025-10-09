@@ -45,6 +45,13 @@ h6 {
   display: grid;
   padding: var(--space-md);
   grid-gap: var(--space-md);
-  justify-items: start;
   width: 32rem;
+}
+
+.two-column-grid {
+  display: grid;
+  padding: var(--space-sm);
+  grid-gap: var(--space-sm);
+  grid-template-columns: repeat(2, 50%);
+  width: 100%;
 }
