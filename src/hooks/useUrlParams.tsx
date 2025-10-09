@@ -47,12 +47,16 @@ const getParamsFromUrl = (url?: string | null) => {
     if (urlParts[3] == 'lightning') {
       if (urlParts[4] == 'o') {
         paramData.pageType = 'object';
+        paramData.sObject = urlParts[5];
       }
       if (urlParts[4] == 'r') {
         paramData.pageType = 'record';
         paramData.recordId = urlParts[6];
+        paramData.sObject = urlParts[5];
       }
-      paramData.sObject = urlParts[5];
+      if (urlParts[4] == 'setup') {
+        paramData.pageType = 'setup';
+      }
     }
     if (urlParts[3] == 'one') {
       const oneBlobParts = urlParts[4].split('#');
@@ -78,10 +82,21 @@ const getParamsFromUrl = (url?: string | null) => {
         }
       }
     }
-    if (urlParts[4] == 'setup') {
-      paramData.pageType = 'setup';
+    if (urlParts[3] == 'apex') {
+      paramData.pageType = 'apex';
+      const apexParts = urlParts[4].split('?');
+      paramData.apexPage = apexParts[0];
+      paramData.apexArgs = apexParts[1]?.split('&').reduce<ApexArgs>((acc, arg) => {
+        const argParts = arg.split('=');
+        return ({
+          ...acc,
+          [argParts[0]]: argParts[1],
+        });
+      }, {});
+      if (paramData.apexArgs?.id) {
+        paramData.recordId = paramData.apexArgs.id;
+      }
     }
-
   }
 
   return paramData;
