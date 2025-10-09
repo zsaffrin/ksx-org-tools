@@ -1,4 +1,6 @@
 .button {
   cursor: pointer;
-  padding: var(--space-sm);
+  padding: var(--space-thin) var(--space-sm);
+  font-family: "Salesforce Sans", sans-serif;
+  font-size: 0.8rem;
 }
