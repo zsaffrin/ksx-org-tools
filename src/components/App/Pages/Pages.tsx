@@ -6,6 +6,8 @@ const Pages = () => {
   const params = useUrlParams();
 
   const targets = [
+    { title: 'Home', target: '/lightning/page/home' },
+    { title: 'Setup', target: '/lightning/setup/SetupOneHome/home' },
     { title: 'Apex Jobs', target: '/lightning/setup/AsyncApexJobs/home' },
     { title: 'Company Information', target: '/lightning/setup/CompanyProfileInfo/home' },
     { title: 'Event Classes', target: '/lightning/o/KimbleOne__EventClass__c/home' },
