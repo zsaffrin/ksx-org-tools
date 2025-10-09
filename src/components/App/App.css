@@ -46,5 +46,5 @@ h6 {
   padding: var(--space-md);
   grid-gap: var(--space-md);
   justify-items: start;
-  width: 48rem;
+  width: 32rem;
 }
