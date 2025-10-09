@@ -1,0 +1,20 @@
+.footer-layout {
+  display: grid;
+  align-items: center;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  justify-content: start;
+  grid-gap: var(--space-md);
+}
+
+.footer-layout > * {
+  cursor: pointer;
+}
+
+.footer-layout a {
+  font-size: 10px;
+}
+
+.footer-layout a:hover {
+  text-decoration: underline;
+}
