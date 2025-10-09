@@ -15,7 +15,7 @@ const Pages = () => {
     { title: 'Job Administration', target: '/apex/KimbleOne__JobAdministration' },
     { title: 'Org-Wide Config', target: '/apex/KimbleOne__ConfigurationSettings' },
     { title: 'Reference Data', target: '/lightning/n/KimbleOne__ReferenceData' },
-    { title: 'Scheduled Jobs', target: '/lightning/setup/ScheduledJobs/home' },
+    { title: 'Scheduled Apex Jobs', target: '/lightning/setup/ScheduledJobs/home' },
     { title: 'Scheduled Operations', target: '/apex/KimbleOne__ScheduledOperations' },
   ];
 
