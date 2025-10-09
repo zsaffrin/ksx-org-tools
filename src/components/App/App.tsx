@@ -2,6 +2,7 @@ import useUrlParams from '../../hooks/useUrlParams';
 import Info from './Info/Info';
 import Actions from './Actions/Actions';
 import Pages from './Pages/Pages';
+import Footer from './Footer/Footer';
 // import Debug from './Debug/Debug';
 import './App.css';
 
@@ -21,6 +22,7 @@ const App = () => {
         <div>Not a Salesforce org url</div>
       )}
       {/* <Debug /> */}
+      <Footer />
     </div>
   );
 };
