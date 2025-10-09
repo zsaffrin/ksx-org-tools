@@ -2,7 +2,6 @@
   display: grid;
   padding: var(--space-sm);
   grid-gap: var(--space-md);
-  justify-items: start;
 }
 
 .record-opener {

@@ -29,7 +29,7 @@ const Pages = () => {
   ));
   
   return (
-    <div className="pages-layout">
+    <div className="two-column-grid">
       {targetNodes}
     </div>
   );

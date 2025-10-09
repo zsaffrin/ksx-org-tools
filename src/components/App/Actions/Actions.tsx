@@ -24,13 +24,19 @@ const Actions = () => {
 
   return (
     <div className="actions-layout">
-      {!!params.recordId && (
-        <div>
+      {params.recordId && (
+        <div className="two-column-grid">
+          <button
+            type='button'
+            onClick={() => openNewPage(params.domain, `/${params.recordId}`)}
+          >
+            Open Current Record
+          </button>
           <button
             type='button'
             onClick={() => openNewPage(params.domain, `/${params.recordId}?nooverride=1`)}
           >
-            Open Current Record with No-override
+            {'Open Current Record w/No-override'}
           </button>
         </div>
       )}
@@ -41,6 +47,16 @@ const Actions = () => {
             onClick={() => redirectPage(constructThreadsTargetString())}
           >
             threads=10
+          </button>
+        </div>
+      )}
+      {params.sObject == 'KimbleOne__ActivityAssignment__c' && params.recordId && (
+        <div>
+          <button
+            type='button'
+            onClick={() => openNewPage(params.domain, `/apex/KimbleOne__ActivityAssignmentRates?id=${params.recordId}`)}
+          >
+            Open Assignment Usage Pattern
           </button>
         </div>
       )}
