@@ -36,7 +36,7 @@ const Actions = () => {
         />
         <Button
           title='Open w/No-override'
-          action={() => openNew(`lightning/_classic/${targetRecordId}`, { nooverride: true })}
+          action={() => openNew(`${targetRecordId}`, { nooverride: true })}
         />
       </div>
       <div className="record-opener">
