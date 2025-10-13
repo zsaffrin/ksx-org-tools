@@ -20,6 +20,7 @@ const Pages = () => {
     { title: 'Reference Data', target: '/lightning/n/KimbleOne__ReferenceData' },
     { title: 'Scheduled Apex Jobs', target: '/lightning/setup/ScheduledJobs/home' },
     { title: 'Scheduled Operations', target: '/apex/KimbleOne__ScheduledOperations' },
+    { title: 'User Details', target: '/lightning/settings/personal/AdvancedUserDetails/home' },
   ];
 
   const targetNodes = targets.map(({ title, target }) => (
