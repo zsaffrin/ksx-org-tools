@@ -20,14 +20,6 @@ const Actions = () => {
   return (
     <div className="actions-layout">
       <ContextActions params={params} />
-      {params.sObject == 'KimbleOne__ActivityAssignment__c' && params.recordId && (
-        <div>
-          <Button
-            title='Open Assignment Usage Pattern'
-            action={() => openNewPage(params.domain, `/apex/KimbleOne__ActivityAssignmentRates?id=${params.recordId}`)}
-          />
-        </div>
-      )}
       <div className="record-opener">
         <div className="record-opener-label">
           Record Id
