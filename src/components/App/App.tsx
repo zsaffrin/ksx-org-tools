@@ -7,19 +7,19 @@ import Footer from './Footer/Footer';
 import './App.css';
 
 const App = () => {
-  const { isSalesforce } = useUrlParams();
+  const { isSupportedDomain } = useUrlParams();
   
   return (
     <div className="app-layout">
       <h1>KSX Org Tools</h1>
-      {isSalesforce ? (
+      {isSupportedDomain ? (
         <>
           <Info />
           <Actions />
           <Pages />
         </>
       ) : (
-        <div>Not a Salesforce org url</div>
+        <div>Unsupported domain. You are probably not in a Salesforce org.</div>
       )}
       {/* <Debug /> */}
       <Footer />

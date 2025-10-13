@@ -20,6 +20,7 @@ interface ParamData {
   url?: string | null,
   domain?: string | null,
   isSalesforce?: boolean | null,
+  isSupportedDomain?: boolean | null,
   pageType?: string | null,
   sObject?: string | null,
   recordId?: string | null,
@@ -29,21 +30,27 @@ interface ParamData {
   apexArgs?: ApexArgs | null,
 };
 
+const supportedDomains: string[] = [
+  '.force.com',
+  '.salesforce-setup.com',
+];
+
+const isSupportedDomain = (domain: string) => supportedDomains.reduce((acc, d) => (
+  acc || domain.endsWith(d)
+), false as boolean);
+
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
-    isSalesforce: false,
     pageType: 'unknown',
   };
   
   if (url && url.length > 1) {
-    const hasSalesforceTLD = url.includes('.force.com');
-    if (hasSalesforceTLD) {
-      paramData.isSalesforce = true;
-    }
-
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
+
+    paramData.isSupportedDomain = isSupportedDomain(paramData.domain);
+
     if (urlParts[3] == 'lightning') {
       if (urlParts[4] == 'o') {
         paramData.pageType = 'object';
