@@ -1,6 +1,10 @@
 import useUrlParams from './useUrlParams';
 
-const argObjToUrlString = (argObject?: {[key: number | string]: number | string | null} | null) => (
+interface UrlArgs {
+  [key: number | string]: number | string | boolean | null
+}
+
+const argObjToUrlString = (argObject?: UrlArgs | null) => (
   argObject
     ? Object.keys(argObject).reduce((acc, argKey) => ([
       ...acc,
@@ -14,7 +18,7 @@ const useNav = () => {
 
   const constructTargetUrl = (
     target?: string | null,
-    args?: {[key: number | string]: number | string | null} | null
+    args?: UrlArgs | null
   ) => {
     if (params.baseUrl) {
       let finalTarget = params.baseUrl;
@@ -35,7 +39,7 @@ const useNav = () => {
 
   const openNew = (
     target?: string | null,
-    args?: {[key: number | string]: number | string | null} | null
+    args?: UrlArgs | null
   ) => {
     const targetUrl = constructTargetUrl(target, args);
 
@@ -44,7 +48,7 @@ const useNav = () => {
 
   const redirectTo = (
     target?: string | null,
-    args?: {[key: number | string]: number | string | null} | null
+    args?: UrlArgs | null
   ) => {
     const targetUrl = constructTargetUrl(target, args);
 
