@@ -33,7 +33,7 @@ const RecordId = ({ recordId, sObject, showOpenerActions = true }: RecordIdProps
           <Button
             size='small'
             title='Open w/ no-override'
-            action={() => openNew(urlPath, { nooverride: true })}
+            action={() => openNew(`${recordId}?nooverride=true`)}
           />
         </>
       )}
