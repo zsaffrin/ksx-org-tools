@@ -3,4 +3,6 @@
   grid-auto-flow: column;
   grid-auto-columns: max-content;
   justify-items: start;
+  grid-gap: var(--space-sm);
+  align-items: center;
 }
