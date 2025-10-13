@@ -3,6 +3,7 @@ import { FaDatabase, FaFile } from 'react-icons/fa';
 import { AiFillLayout } from 'react-icons/ai';
 import { FaListUl } from 'react-icons/fa6';
 import useUrlParams from '../../../hooks/useUrlParams';
+import { RecordId } from '../../ui';
 import './Info.css';
 
 interface InfoFact {
@@ -30,7 +31,7 @@ const Info = () => {
     });
     facts.push({
       icon: <FaFile title='Record' />,
-      content: params.recordId,
+      content: <RecordId recordId={params.recordId} />,
     });
   }
 
