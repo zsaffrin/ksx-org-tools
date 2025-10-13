@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import useUrlParams from '../../../hooks/useUrlParams';
+import { useNav, useUrlParams } from '../../../hooks';
 import { FaBug, FaGithub } from 'react-icons/fa';
 import { openNewPage } from '../../../utilities';
 import './Footer.css';
@@ -7,6 +7,7 @@ import './Footer.css';
 const Footer = () => {
   const [showDebug, setShowDebug] = useState<boolean>(false);
   const params = useUrlParams();
+  const { openExternal } = useNav();
   
   const version = __APP_VERSION__;
   
@@ -15,7 +16,7 @@ const Footer = () => {
       <div className='footer-action-row'>
         <FaGithub className='icon' onClick={() => openNewPage('github.com', '/zsaffrin/ksx-org-tools')} />
         <div className='info'>
-          <a onClick={() => openNewPage('github.com', '/zsaffrin/ksx-org-tools')}>
+          <a onClick={() => openExternal('https://github.com/zsaffrin/ksx-org-tools')}>
             {`v${version}`}
           </a>
         </div>
