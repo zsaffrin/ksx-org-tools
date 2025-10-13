@@ -48,10 +48,11 @@
 }
 
 .info-subfacts {
-  font-size: 0.85em;
+  font-size: 0.9em;
   display: grid;
-  grid-gap: var(--space-thin);
+  grid-gap: var(--space-sm);
   grid-template-columns: max-content 1fr;
+  align-items: center;
 }
 
 .info-subfact-label {
