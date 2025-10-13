@@ -8,7 +8,7 @@ interface ContextActionsProps {
     sObject?: string | null,
     recordId?: string | null,
     apexPage?: string | null,
-    apexArgs?: { [key: string]: string } | null,
+    apexArgs?: { [key: string]: string | null } | null,
   }
 }
 
