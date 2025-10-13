@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import useUrlParams from '../../../hooks/useUrlParams';
-import { openNewPage } from '../../../utilities';
+import { useNav, useUrlParams } from '../../../hooks';
 import { Button } from '../../ui';
 import ContextActions from './ContextActions';
 import './Actions.css';
@@ -9,6 +8,7 @@ const Actions = () => {
   const [targetRecordId, setTargetRecordId] = useState<string>('');
   const [objectSearchTerm, setObjectSearchTerm] = useState<string>('');
   const params = useUrlParams();
+  const { openNew } = useNav();
 
   const handleTargetRecordIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTargetRecordId(e.currentTarget.value);
@@ -32,11 +32,11 @@ const Actions = () => {
         />
         <Button
           title='Open'
-          action={() => openNewPage(params.domain, `/${targetRecordId}`)}
+          action={() => openNew(`lightning/_classic/${targetRecordId}`)}
         />
         <Button
           title='Open w/No-override'
-          action={() => openNewPage(params.domain, `/${targetRecordId}?nooverride=1`)}
+          action={() => openNew(`lightning/_classic/${targetRecordId}`, { nooverride: true })}
         />
       </div>
       <div className="record-opener">
@@ -48,7 +48,7 @@ const Actions = () => {
         />
         <Button
           title='Search ObjectLinks'
-          action={() => openNewPage(params.domain, `/apex/KimbleOne__ObjectLinks?f=${objectSearchTerm}`)}
+          action={() => openNew('apex/KimbleOne__ObjectLinks', { f: objectSearchTerm })}
         />
       </div>
     </div>
