@@ -18,6 +18,7 @@ interface ApexArgs {
 
 interface ParamData {
   url?: string | null,
+  baseUrl?: string | null,
   domain?: string | null,
   isSupportedDomain?: boolean | null,
   pageType?: string | null,
@@ -47,6 +48,7 @@ const getParamsFromUrl = (url?: string | null) => {
   if (url && url.length > 1) {
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
+    paramData.baseUrl = urlParts[0] + '//' + paramData.domain;
 
     paramData.isSupportedDomain = isSupportedDomain(paramData.domain);
 
