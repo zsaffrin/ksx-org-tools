@@ -4,3 +4,8 @@
   font-family: "Salesforce Sans", sans-serif;
   font-size: 0.8rem;
 }
+
+.button-small {
+  font-size: 0.71rem;
+  padding: 0 var(--space-thin);
+}
