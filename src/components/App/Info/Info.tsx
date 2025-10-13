@@ -31,7 +31,7 @@ const Info = () => {
     });
     facts.push({
       icon: <FaFile title='Record' />,
-      content: <RecordId recordId={params.recordId} />,
+      content: <RecordId sObject={params.sObject} recordId={params.recordId} />,
     });
   }
 
