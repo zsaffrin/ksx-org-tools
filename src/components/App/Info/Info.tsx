@@ -3,6 +3,7 @@ import { FaDatabase, FaFile } from 'react-icons/fa';
 import { AiFillLayout } from 'react-icons/ai';
 import { FaListUl } from 'react-icons/fa6';
 import useUrlParams from '../../../hooks/useUrlParams';
+import { isSalesforceRecordId } from '../../../utilities';
 import { RecordId } from '../../ui';
 import './Info.css';
 
@@ -42,13 +43,23 @@ const Info = () => {
     });
 
     if (params.apexArgs && Object.keys(params.apexArgs).length > 0) {
-      const pageArgNodes = Object.keys(params.apexArgs).reduce((acc, argKey) => (
-        [
-          ...acc,
-          <div className='info-subfact-label'>{argKey}</div>,
-          <div>{params.apexArgs?.[argKey]}</div>,
-        ]
-      ), [] as ReactNode[]);
+      const pageArgNodes = Object.keys(params.apexArgs).reduce((acc, argKey) => {
+        const argVal = params.apexArgs?.[argKey] || null;
+        const isSalesforceId = isSalesforceRecordId(argVal);
+
+        return (
+          [
+            ...acc,
+            <div className='info-subfact-label'>{argKey}</div>,
+            <div>
+              {isSalesforceId 
+                ? <RecordId recordId={argVal} />
+                : argVal
+              }
+            </div>,
+          ]
+        );
+      }, [] as ReactNode[]);
   
       facts.push({
         icon: <FaListUl title='Page Args' />,
