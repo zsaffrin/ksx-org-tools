@@ -58,8 +58,15 @@ const useNav = () => {
       });
     };
   };
+
+  const openExternal = (
+    target?: string | null,
+  ) => {
+    if (target) window.open(target);
+  };
   
   return {
+    openExternal,
     openNew,
     redirectTo,
   };
