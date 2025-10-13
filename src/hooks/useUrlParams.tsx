@@ -19,7 +19,6 @@ interface ApexArgs {
 interface ParamData {
   url?: string | null,
   domain?: string | null,
-  isSalesforce?: boolean | null,
   isSupportedDomain?: boolean | null,
   pageType?: string | null,
   sObject?: string | null,
