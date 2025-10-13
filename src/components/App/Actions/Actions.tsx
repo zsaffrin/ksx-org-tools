@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import useUrlParams from '../../../hooks/useUrlParams';
-import { openNewPage, redirectPage } from '../../../utilities';
+import { openNewPage } from '../../../utilities';
 import { Button } from '../../ui';
+import ContextActions from './ContextActions';
 import './Actions.css';
 
 const Actions = () => {
@@ -16,35 +17,9 @@ const Actions = () => {
     setObjectSearchTerm(e.currentTarget.value);
   };
 
-  const constructThreadsTargetString = () => {
-    const joiner = params.apexArgs
-      ? '&'
-      : '?';
-    return `${params.url}` + joiner + 'threads=10';
-  };
-
   return (
     <div className="actions-layout">
-      {params.recordId && (
-        <div className="two-column-grid">
-          <Button
-            title='Open Current Record'
-            action={() => openNewPage(params.domain, `/${params.recordId}`)}
-          />
-          <Button
-            title='Open Current Record w/No-override'
-            action={() => openNewPage(params.domain, `/${params.recordId}?nooverride=1`)}
-          />
-        </div>
-      )}
-      {params.apexPage == 'JobsPending' && (
-        <div>
-          <Button
-            title='threads=10'
-            action={() => redirectPage(constructThreadsTargetString())}
-          />
-        </div>
-      )}
+      <ContextActions params={params} />
       {params.sObject == 'KimbleOne__ActivityAssignment__c' && params.recordId && (
         <div>
           <Button
