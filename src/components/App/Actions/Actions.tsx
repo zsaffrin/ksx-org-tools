@@ -8,7 +8,7 @@ const Actions = () => {
   const [targetRecordId, setTargetRecordId] = useState<string>('');
   const [objectSearchTerm, setObjectSearchTerm] = useState<string>('');
   const params = useUrlParams();
-  const { openNew } = useNav();
+  const { navigate } = useNav();
 
   const handleTargetRecordIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTargetRecordId(e.currentTarget.value);
@@ -32,11 +32,11 @@ const Actions = () => {
         />
         <Button
           title='Open'
-          action={() => openNew(`lightning/_classic/${targetRecordId}`)}
-        />
+          action={() => navigate({ type: 'record', recordId: targetRecordId })}
+          />
         <Button
           title='Open w/No-override'
-          action={() => openNew(`${targetRecordId}`, { nooverride: true })}
+          action={() => navigate({ type: 'record', recordId: targetRecordId }, { nooverride: true })}
         />
       </div>
       <div className="record-opener">
@@ -48,7 +48,7 @@ const Actions = () => {
         />
         <Button
           title='Search ObjectLinks'
-          action={() => openNew('apex/KimbleOne__ObjectLinks', { f: objectSearchTerm })}
+          action={() => navigate({ type: 'apex', page: 'KimbleOne__ObjectLinks' }, { f: objectSearchTerm })}
         />
       </div>
     </div>

@@ -3,29 +3,29 @@ import { Button } from '../../ui';
 import './Pages.css';
 
 const Pages = () => {
-  const { openNew } = useNav();
+  const { navigate } = useNav();
 
   const targets = [
-    { title: 'Home', target: 'lightning/page/home' },
-    { title: 'Setup', target: 'lightning/setup/SetupOneHome/home' },
-    { title: 'Apex Jobs', target: 'lightning/setup/AsyncApexJobs/home' },
-    { title: 'Company Information', target: 'lightning/setup/CompanyProfileInfo/home' },
-    { title: 'Event Classes', target: 'lightning/o/KimbleOne__EventClass__c/home' },
-    { title: 'Grant LMA', target: 'lightning/settings/personal/GrantLoginAccess/home' },
-    { title: 'Installed Packages', target: 'lightning/setup/ImportedPackage/home' },
-    { title: 'Interface Type Dashboard', target: 'apex/KimbleOne__InterfaceTypeDashboard' },
-    { title: 'Job Administration', target: 'apex/KimbleOne__JobAdministration' },
-    { title: 'Org-Wide Config', target: 'apex/KimbleOne__ConfigurationSettings' },
-    { title: 'Reference Data', target: 'lightning/n/KimbleOne__ReferenceData' },
-    { title: 'Scheduled Apex Jobs', target: 'lightning/setup/ScheduledJobs/home' },
-    { title: 'Scheduled Operations', target: 'apex/KimbleOne__ScheduledOperations' },
-    { title: 'User Details', target: 'lightning/settings/personal/AdvancedUserDetails/home' },
+    { title: 'Home', target: { type: 'lightning', page: 'home' } },
+    { title: 'Setup', target: { type: 'setup', page: 'SetupOneHome' } },
+    { title: 'Apex Jobs', target: { type: 'setup', page: 'AsyncApexJobs' } },
+    { title: 'Company Information', target: { type: 'setup', page: 'CompanyProfileInfo' } },
+    { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
+    { title: 'Grant LMA', target: { type: 'settings', page: 'GrantLoginAccess' } },
+    { title: 'Installed Packages', target: { type: 'setup', page: 'ImportedPackage' } },
+    { title: 'Interface Type Dashboard', target: { type: 'apex', page: 'KimbleOne__InterfaceTypeDashboard' } },
+    { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
+    { title: 'Org-Wide Config', target: { type: 'apex', page: 'KimbleOne__ConfigurationSettings' } },
+    { title: 'Reference Data', target: { type: 'n', page: 'KimbleOne__ReferenceData' } },
+    { title: 'Scheduled Apex Jobs', target: { type: 'setup', page: 'ScheduledJobs' } },
+    { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
+    { title: 'User Details', target: { type: 'settings', page: 'AdvancedUserDetails' } }
   ];
 
   const targetNodes = targets.map(({ title, target }) => (
     <Button
       title={title}
-      action={() => openNew(target)}
+      action={() => navigate(target)}
     />
   ));
   

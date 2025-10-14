@@ -14,11 +14,10 @@ interface ContextActionsProps {
 }
 
 const ContextActions = ({ params }: ContextActionsProps) => {
-  const { openNew, redirectTo } = useNav();
+  const { navigate } = useNav();
   
   // Job Administration > Pending Jobs runner
   if (params?.apexPage == 'JobsPending') {
-    const targetPath = 'apex/JobsPending';
     const args = {
       ...params.apexArgs,
       threads: 10,
@@ -28,7 +27,11 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       <div>
         <Button
           title='threads=10'
-          action={() => redirectTo(targetPath, args)}
+          action={() => navigate({
+            type: 'apex',
+            page: 'JobsPending',
+            redirect: true
+          }, args)}
         />
       </div>
     );
@@ -36,7 +39,6 @@ const ContextActions = ({ params }: ContextActionsProps) => {
 
   // Activity Assignment
   if (params?.sObject == 'KimbleOne__ActivityAssignment__c' && params?.recordId) {
-    const targetPath = 'apex/KimbleOne__ActivityAssignmentRates';
     const args = {
       id: params.recordId,
     };
@@ -45,7 +47,10 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       <div>
         <Button
           title='Open Assignment Usage Pattern'
-          action={() => openNew(targetPath, args)}
+          action={() => navigate({
+            type: 'apex',
+            page: 'KimbleOne__ActivityAssignmentRates'
+          }, args)}
         />
       </div>
     );

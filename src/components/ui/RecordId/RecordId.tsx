@@ -10,15 +10,11 @@ interface RecordIdProps {
 }
 
 const RecordId = ({ recordId, sObject, showOpenerActions = true }: RecordIdProps) => {
-  const { openNew } = useNav();
+  const { navigate } = useNav();
 
   const isSalesforceId = isSalesforceRecordId(recordId || null);
 
   const showActions = isSalesforceId && showOpenerActions;
-
-  const urlPath = sObject 
-    ? `lightning/r/${sObject}/${recordId}/view`
-    : `lightning/_classic/${recordId}`;
   
   return (
     <div className='record-id-layout'>
@@ -28,12 +24,12 @@ const RecordId = ({ recordId, sObject, showOpenerActions = true }: RecordIdProps
           <Button
             size='small'
             title='Open in New'
-            action={() => openNew(urlPath)}
-          />
+            action={() => navigate({ type: 'record', recordId, sObject })}
+            />
           <Button
             size='small'
             title='Open w/ no-override'
-            action={() => openNew(recordId, { nooverride: true })}
+            action={() => navigate({ type: 'record', recordId, sObject }, { nooverride: true })}
           />
         </>
       )}

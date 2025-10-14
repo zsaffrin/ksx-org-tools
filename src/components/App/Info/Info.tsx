@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { FaDatabase, FaFile } from 'react-icons/fa';
 import { AiFillLayout } from 'react-icons/ai';
 import { FaListUl } from 'react-icons/fa6';
-import useUrlParams from '../../../hooks/useUrlParams';
+import { useUrlParams } from '../../../hooks';
 import { isSalesforceRecordId } from '../../../utilities';
 import { RecordId } from '../../ui';
 import './Info.css';

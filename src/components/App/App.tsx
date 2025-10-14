@@ -1,4 +1,4 @@
-import useUrlParams from '../../hooks/useUrlParams';
+import { useUrlParams } from '../../hooks';
 import Info from './Info/Info';
 import Actions from './Actions/Actions';
 import Pages from './Pages/Pages';

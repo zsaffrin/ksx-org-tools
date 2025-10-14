@@ -3,6 +3,15 @@ import useUrlParams from './useUrlParams';
 interface UrlArgs {
   [key: number | string]: number | string | boolean | null
 }
+interface NavigateTargetData {
+  type?: string | null,
+  recordId?: string | null,
+  sObject?: string | null,
+  page?: string | null,
+  target?: string | null,
+  redirect?: boolean | null,
+  external?: boolean | null,
+}
 
 const argObjToUrlString = (argObject?: UrlArgs | null) => (
   argObject
@@ -16,47 +25,77 @@ const argObjToUrlString = (argObject?: UrlArgs | null) => (
 const useNav = () => {
   const params = useUrlParams();
 
-  const constructTargetUrl = (
-    target?: string | null,
-    args?: UrlArgs | null
+  const navigate = (
+    targetData?: NavigateTargetData | null,
+    args?: UrlArgs | null,
   ) => {
-    if (params.baseUrl) {
-      let finalTarget = params.baseUrl;
-
-      if (target) {
-        finalTarget = finalTarget.concat('/', target);
-      }
-
-      if (args) {
-        finalTarget = finalTarget.concat('?', argObjToUrlString(args) || '');
-      }
-
-      return finalTarget;
+    const urlParts = [];
+    if (targetData?.type == 'custom') {
+      urlParts.push(targetData.target);
+    } else {
+      urlParts.push(params.baseUrl);
     }
 
-    return;
-  };
+    if (targetData?.type == 'record') {
+      if (targetData?.sObject) {
+        urlParts.push('lightning', 'r', targetData.sObject, targetData.recordId, 'view');
+      } else {
+        urlParts.push(targetData.recordId);
+      }
+    }
 
-  const openNew = (
-    target?: string | null,
-    args?: UrlArgs | null
-  ) => {
-    const targetUrl = constructTargetUrl(target, args);
+    if (targetData?.type == 'object') {
+      if (targetData?.sObject) {
+        urlParts.push('lightning', 'o', targetData.sObject, 'home');
+      }
+    }
 
-    if (targetUrl) window.open(targetUrl);
-  };
+    if (targetData?.type == 'apex') {
+      if (targetData?.page) {
+        urlParts.push('apex', targetData.page);
+      }
+    }
 
-  const redirectTo = (
-    target?: string | null,
-    args?: UrlArgs | null
-  ) => {
-    const targetUrl = constructTargetUrl(target, args);
+    if (targetData?.type == 'lightning') {
+      if (targetData?.page) {
+        urlParts.push('lightning', 'page', targetData.page);
+      }
+    }
 
-    if (targetUrl) {
+    if (targetData?.type == 'n') {
+      if (targetData?.page) {
+        urlParts.push('lightning', 'n', targetData.page);
+      }
+    }
+
+    if (targetData?.type == 'settings') {
+      if (targetData?.page) {
+        urlParts.push('lightning', 'settings', 'personal', targetData.page, 'home');
+      }
+    }
+
+    if (targetData?.type == 'setup') {
+      if (targetData?.page) {
+        urlParts.push('lightning', 'setup', targetData.page, 'home');
+      }
+    }
+
+    let urlPath = urlParts.join('/');
+
+    if (args && Object.keys(args).length > 0) {
+      const argString = argObjToUrlString(args);
+      if (argString) {
+        urlPath = urlPath.concat('?', argString);
+      }
+    }
+
+    if (targetData?.redirect) {
       chrome.tabs.update({
-        url: targetUrl,
+        url: urlPath,
       });
-    };
+    } else {
+      window.open(urlPath);
+    }
   };
 
   const openExternal = (
@@ -66,9 +105,8 @@ const useNav = () => {
   };
   
   return {
+    navigate,
     openExternal,
-    openNew,
-    redirectTo,
   };
 };
 
