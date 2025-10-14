@@ -3,7 +3,6 @@ import Info from './Info/Info';
 import Actions from './Actions/Actions';
 import Pages from './Pages/Pages';
 import Footer from './Footer/Footer';
-// import Debug from './Debug/Debug';
 import './App.css';
 
 const App = () => {
@@ -21,7 +20,6 @@ const App = () => {
       ) : (
         <div>Unsupported domain. You are probably not in a Salesforce org.</div>
       )}
-      {/* <Debug /> */}
       <Footer />
     </div>
   );
