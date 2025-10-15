@@ -20,36 +20,45 @@ const Actions = () => {
   return (
     <div className="actions-layout">
       <ContextActions params={params} />
-      <div className="record-opener">
-        <div className="record-opener-label">
-          Record Id
-        </div>
-        <input
-          id='targetRecordId'
-          type='text'
-          value={targetRecordId}
-          onChange={handleTargetRecordIdChange}
-        />
-        <Button
-          title='Open'
-          action={() => navigate({ type: 'record', recordId: targetRecordId })}
+      <div className='two-column-grid'>
+        <div className="record-opener left">
+          <div className="record-opener-label">
+            Record Id
+          </div>
+          <input
+            id='targetRecordId'
+            type='text'
+            value={targetRecordId}
+            onChange={handleTargetRecordIdChange}
           />
-        <Button
-          title='Open w/No-override'
-          action={() => navigate({ type: 'record', recordId: targetRecordId }, { nooverride: true })}
-        />
-      </div>
-      <div className="record-opener">
-        <input
-          id='objectSearchTerm'
-          type='text'
-          value={objectSearchTerm}
-          onChange={handleObjectSearchTermChange}
-        />
-        <Button
-          title='Search ObjectLinks'
-          action={() => navigate({ type: 'apex', page: 'KimbleOne__ObjectLinks' }, { f: objectSearchTerm })}
-        />
+        </div>
+        <div className="record-opener">
+          <Button
+            title='Open'
+            action={() => navigate({ type: 'record', recordId: targetRecordId })}
+            />
+          <Button
+            title='Open w/No-override'
+            action={() => navigate({ type: 'record', recordId: targetRecordId }, { nooverride: true })}
+          />
+        </div>
+        <div className="record-opener left">
+          <div className="record-opener-label">
+            Search
+          </div>
+          <input
+            id='objectSearchTerm'
+            type='text'
+            value={objectSearchTerm}
+            onChange={handleObjectSearchTermChange}
+          />
+        </div>
+        <div className="record-opener">
+          <Button
+            title='Search ObjectLinks'
+            action={() => navigate({ type: 'apex', page: 'KimbleOne__ObjectLinks' }, { f: objectSearchTerm })}
+          />
+        </div>
       </div>
     </div>
   );

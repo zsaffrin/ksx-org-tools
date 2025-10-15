@@ -6,12 +6,18 @@
 
 .record-opener {
   display: grid;
-  padding: var(--space-sm);
   grid-gap: var(--space-sm);
-  justify-items: start;
   align-items: center;
   grid-auto-flow: column;
   grid-auto-columns: max-content;
+}
+
+.record-opener.left {
+  grid-template-columns: max-content 1fr;
+}
+
+.record-opener.left input[type="text"] {
+  width: 100%;
 }
 
 .record-opener-label {
