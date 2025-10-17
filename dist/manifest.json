@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0",
+  "manifest_version": 3,
+  "name": "KSX Org Tools",
+  "description": "Tools and shortcuts for supporting Salesforce orgs with Kantata SX installed",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "KSX Org Tools"
+  },
+  "permissions": ["activeTab", "scripting", "tabs"]
+}
