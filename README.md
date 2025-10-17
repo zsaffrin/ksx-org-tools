@@ -57,9 +57,13 @@ d. Navigate to where you installed the repo and select the `/dist` folder
 
 ![Select dist folder](docs/selectdist.png)
 
+That's it! The extension is now ready to use. You can make it easier to use:
+
 e. Pin the extension, so it shows in your toolbar
 
 ![Pin extension](docs/pinextension.png)
+
+Now just click the toolbar icon from any SF org page
 
 ## Updating
 
