@@ -49,7 +49,9 @@ c. Click the **Load Unpacked** button.
 
 ![Load Unpacked](public/loadunpacked.png)
 
-d. Navigate to where you installed the repo, go to the `/dist` folder, and select the file
+d. Navigate to where you installed the repo and select the `/dist` folder
+
+![Select dist folder](public/selectdist.png)
 
 e. Pin the extension, so it shows in your toolbar
 
@@ -59,7 +61,7 @@ e. Pin the extension, so it shows in your toolbar
 
 To update to the latest version:
 
-1. In your terminal, navigate to the repo folder
+1. In your terminal, navigate to the root repo folder
 2. Run `git pull`
 3. Restart Chrome browser, or on the Extensions page click the **Reload** icon
 
