@@ -2,7 +2,7 @@
 
 A simple Google Chrome browser extension for common shortcuts in a Salesforce org with Kantata SX installed.
 
-![KSX Org Tools Screenshot](public/ksxorgtools.png)
+![KSX Org Tools Screenshot](docs/ksxorgtools.png)
 
 This extension does not require authentication, permissions, or API access, nor does it access, store, or modify any data directly in the org. Its functions and shortcuts are standardized and information is parsed solely from the current displayed page address.
 
@@ -33,31 +33,33 @@ On a PC, follow the steps for the [Git For Windows](https://gitforwindows.org/) 
 
 Use the "**<> Code**" button above, and on the "HTTPS" tab under the Local > Clone section, copy the https url to your clipboard.
 
-![Copy repo url](public/copyrepo.png)
+![Copy repo url](docs/copyrepo.png)
 
 In your terminal, navigate to the folder where you want to store the repository. Then run `git clone ` and paste the copied url.
+
+![Git clone](docs/gitclone.png)
 
 ### 2. Install the extension
 
 a. Open Chrome browser, and from the **Window** menu open the **Extensions** page.
 
-![Extensions menu](public/extensionsmenu.png)
+![Extensions menu](docs/extensionsmenu.png)
 
 b. In the top-right corner, enable the toggle titled **Developer Mode**
 
-![Developer mode](public/developermode.png)
+![Developer mode](docs/developermode.png)
 
 c. Click the **Load Unpacked** button.
 
-![Load Unpacked](public/loadunpacked.png)
+![Load Unpacked](docs/loadunpacked.png)
 
 d. Navigate to where you installed the repo and select the `/dist` folder
 
-![Select dist folder](public/selectdist.png)
+![Select dist folder](docs/selectdist.png)
 
 e. Pin the extension, so it shows in your toolbar
 
-![Pin extension](public/pinextension.png)
+![Pin extension](docs/pinextension.png)
 
 ## Updating
 
@@ -67,4 +69,4 @@ To update to the latest version:
 2. Run `git pull`
 3. Restart Chrome browser, or on the Extensions page click the **Reload** icon
 
-![Reload extension](public/reloadextension.png)
+![Reload extension](docs/reloadextension.png)
