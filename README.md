@@ -14,6 +14,8 @@ This extension assumes you are operating as a System Administrator user on behal
 
 Simply open the extension while on a tab logged into a Salesforce org with Kantata SX installed.
 
+This currently only works in Google Chrome browser
+
 ## Installation
 
 **Prerequisite**: You will need to have Git installed on your machine
