@@ -17,17 +17,20 @@ interface ApexArgs {
 }
 
 interface ParamData {
-  url?: string | null,
+  apexArgs?: ApexArgs | null,
+  apexPage?: string | null,
   baseUrl?: string | null,
   domain?: string | null,
+  domainName?: string | null,
+  homeUrl?: string | null,
   isSupportedDomain?: boolean | null,
-  pageType?: string | null,
-  sObject?: string | null,
-  recordId?: string | null,
   oneBlob?: string | null,
   oneBlobDecoded?: OneUrlBlobData | null,
-  apexPage?: string | null,
-  apexArgs?: ApexArgs | null,
+  pageType?: string | null,
+  protocol?: string | null,
+  recordId?: string | null,
+  sObject?: string | null,
+  url?: string | null,
 };
 
 const supportedDomains: string[] = [
@@ -48,7 +51,10 @@ const getParamsFromUrl = (url?: string | null) => {
   if (url && url.length > 1) {
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
-    paramData.baseUrl = urlParts[0] + '//' + paramData.domain;
+    paramData.domainName = paramData.domain.split('.')[0];
+    paramData.protocol = urlParts[0];
+    paramData.baseUrl = paramData.protocol + '//' + paramData.domain;
+    paramData.homeUrl = paramData.protocol + '//' + paramData.domainName + '.lightning.force.com';
 
     paramData.isSupportedDomain = isSupportedDomain(paramData.domain);
 
