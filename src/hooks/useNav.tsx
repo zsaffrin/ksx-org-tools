@@ -11,6 +11,7 @@ interface NavigateTargetData {
   target?: string | null,
   redirect?: boolean | null,
   external?: boolean | null,
+  maintainUrl?: boolean | null,
 }
 
 const argObjToUrlString = (argObject?: UrlArgs | null) => (
@@ -32,8 +33,10 @@ const useNav = () => {
     const urlParts = [];
     if (targetData?.type == 'custom') {
       urlParts.push(targetData.target);
-    } else {
+    } else if (targetData?.maintainUrl) {
       urlParts.push(params.baseUrl);
+    } else {
+      urlParts.push(params.homeUrl);
     }
 
     if (targetData?.type == 'record') {
