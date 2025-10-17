@@ -85,13 +85,13 @@ const Info = () => {
     ]
   ), [] as ReactNode[]);
 
-  return (
+  return factNodes.length > 0 ? (
     <div className='info-layout'>
       <div className='info-facts'>
         {factNodes}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Info;
