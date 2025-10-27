@@ -23,6 +23,7 @@ interface ParamData {
   domain?: string | null,
   domainName?: string | null,
   homeUrl?: string | null,
+  isSandbox?: boolean | null,
   isSupportedDomain?: boolean | null,
   oneBlob?: string | null,
   oneBlobDecoded?: OneUrlBlobData | null,
@@ -42,6 +43,15 @@ const isSupportedDomain = (domain: string) => supportedDomains.reduce((acc, d) =
   acc || domain.endsWith(d)
 ), false as boolean);
 
+const isSandbox = (domain: string) => {
+  const domainParts = domain.split('.');
+  if (domainParts[1] == 'sandbox') {
+    return true;
+  }
+
+  return false;
+};
+
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
@@ -54,7 +64,13 @@ const getParamsFromUrl = (url?: string | null) => {
     paramData.domainName = paramData.domain.split('.')[0];
     paramData.protocol = urlParts[0];
     paramData.baseUrl = paramData.protocol + '//' + paramData.domain;
-    paramData.homeUrl = paramData.protocol + '//' + paramData.domainName + '.lightning.force.com';
+    
+    paramData.isSandbox = isSandbox(paramData.domain);
+    paramData.homeUrl = paramData.protocol + '//' + paramData.domainName;
+    if (paramData.isSandbox) {
+      paramData.homeUrl += '.sandbox';
+    }
+    paramData.homeUrl += '.lightning.force.com';
 
     paramData.isSupportedDomain = isSupportedDomain(paramData.domain);
 
