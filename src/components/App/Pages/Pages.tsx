@@ -25,7 +25,7 @@ const setupTargets = [
   { title: 'Grant LMA', target: { type: 'settings', page: 'GrantLoginAccess' } },
   { title: 'Installed Packages', target: { type: 'setup', page: 'ImportedPackage' } },
   { title: 'Scheduled Apex Jobs', target: { type: 'setup', page: 'ScheduledJobs' } },
-  { title: 'User Details', target: { type: 'settings', page: 'AdvancedUserDetails' } }
+  { title: 'My User Details', target: { type: 'settings', page: 'AdvancedUserDetails' } }
 ];
 
 const Pages = () => {
