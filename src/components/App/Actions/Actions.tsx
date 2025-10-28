@@ -38,7 +38,7 @@ const Actions = () => {
             action={() => navigate({ type: 'record', recordId: targetRecordId })}
             />
           <Button
-            title='Open w/No-override'
+            title='Open w/ no-override'
             action={() => navigate({ type: 'record', recordId: targetRecordId }, { nooverride: true })}
           />
         </div>
