@@ -6,14 +6,15 @@ import './Pages.css';
 const appTargets = [
   { title: 'Home', target: { type: 'lightning', page: 'home' } },
   { title: 'Interface Type Dashboard', target: { type: 'apex', page: 'KimbleOne__InterfaceTypeDashboard' } },
+  { title: 'Period Management', target: { type: 'n', page: 'KimbleOne__PeriodManagement' } },
   { title: 'Reference Data Home', target: { type: 'n', page: 'KimbleOne__ReferenceData' } },
-  { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
 ];
 
 const apexPageTargets = [
   { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
   { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
   { title: 'Org-Wide Config', target: { type: 'apex', page: 'KimbleOne__ConfigurationSettings' } },
+  { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
 ];
 
 const setupTargets = [
