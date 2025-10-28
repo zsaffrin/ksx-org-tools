@@ -1,0 +1,5 @@
+.section-title {
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0 var(--space-sm);
+}
