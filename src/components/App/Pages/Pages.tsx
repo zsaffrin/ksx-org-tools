@@ -1,39 +1,57 @@
 import { useNav } from '../../../hooks';
 import { Button } from '../../ui';
+import PageSection from './PageSection';
 import './Pages.css';
+
+const appTargets = [
+  { title: 'Home', target: { type: 'lightning', page: 'home' } },
+  { title: 'Interface Type Dashboard', target: { type: 'apex', page: 'KimbleOne__InterfaceTypeDashboard' } },
+  { title: 'Reference Data Home', target: { type: 'n', page: 'KimbleOne__ReferenceData' } },
+  { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
+];
+
+const apexPageTargets = [
+  { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
+  { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
+  { title: 'Org-Wide Config', target: { type: 'apex', page: 'KimbleOne__ConfigurationSettings' } },
+];
+
+const setupTargets = [
+  { title: 'Setup Home', target: { type: 'setup', page: 'SetupOneHome' } },
+  { title: 'Apex Jobs', target: { type: 'setup', page: 'AsyncApexJobs' } },
+  { title: 'Company Information', target: { type: 'setup', page: 'CompanyProfileInfo' } },
+  { title: 'Debug Logs', target: { type: 'setup', page: 'ApexDebugLogs' } },
+  { title: 'Grant LMA', target: { type: 'settings', page: 'GrantLoginAccess' } },
+  { title: 'Installed Packages', target: { type: 'setup', page: 'ImportedPackage' } },
+  { title: 'Scheduled Apex Jobs', target: { type: 'setup', page: 'ScheduledJobs' } },
+  { title: 'User Details', target: { type: 'settings', page: 'AdvancedUserDetails' } }
+];
 
 const Pages = () => {
   const { navigate } = useNav();
 
-  const targets = [
-    { title: 'Home', target: { type: 'lightning', page: 'home' } },
-    { title: 'Setup', target: { type: 'setup', page: 'SetupOneHome' } },
-    { title: 'Apex Jobs', target: { type: 'setup', page: 'AsyncApexJobs' } },
-    { title: 'Company Information', target: { type: 'setup', page: 'CompanyProfileInfo' } },
-    { title: 'Debug Logs', target: { type: 'setup', page: 'ApexDebugLogs' } },
-    { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
-    { title: 'Grant LMA', target: { type: 'settings', page: 'GrantLoginAccess' } },
-    { title: 'Installed Packages', target: { type: 'setup', page: 'ImportedPackage' } },
-    { title: 'Interface Type Dashboard', target: { type: 'apex', page: 'KimbleOne__InterfaceTypeDashboard' } },
-    { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
-    { title: 'Org-Wide Config', target: { type: 'apex', page: 'KimbleOne__ConfigurationSettings' } },
-    { title: 'Reference Data', target: { type: 'n', page: 'KimbleOne__ReferenceData' } },
-    { title: 'Scheduled Apex Jobs', target: { type: 'setup', page: 'ScheduledJobs' } },
-    { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
-    { title: 'User Details', target: { type: 'settings', page: 'AdvancedUserDetails' } }
-  ];
-
-  const targetNodes = targets.map(({ title, target }) => (
+  const renderNodes = (
+    targets: {
+      title: string,
+      target: {
+        type: string,
+        page?: string,
+        sObject?: string,
+      }
+    }[]
+  ) => targets.map(({ title, target }) => (
     <Button
       title={title}
-      action={() => navigate(target)}
+      action={() => target && navigate(target)}
     />
   ));
   
   return (
-    <div className="two-column-grid">
-      {targetNodes}
-    </div>
+    <>
+      <PageSection title='App Pages' content={renderNodes(appTargets)} />
+      <PageSection title='Kantata Admin' content={renderNodes(apexPageTargets)} />
+      <PageSection title='Setup' content={renderNodes(setupTargets)} />
+    </>
   );
 };
 
