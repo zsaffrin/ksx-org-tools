@@ -10,6 +10,7 @@ const Pages = () => {
     { title: 'Setup', target: { type: 'setup', page: 'SetupOneHome' } },
     { title: 'Apex Jobs', target: { type: 'setup', page: 'AsyncApexJobs' } },
     { title: 'Company Information', target: { type: 'setup', page: 'CompanyProfileInfo' } },
+    { title: 'Debug Logs', target: { type: 'setup', page: 'ApexDebugLogs' } },
     { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
     { title: 'Grant LMA', target: { type: 'settings', page: 'GrantLoginAccess' } },
     { title: 'Installed Packages', target: { type: 'setup', page: 'ImportedPackage' } },
