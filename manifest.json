@@ -1,5 +1,5 @@
 {
-  "version": "0.2.1",
+  "version": "0.2.2",
   "manifest_version": 3,
   "name": "KSX Org Tools",
   "description": "Tools and shortcuts for supporting Salesforce orgs with Kantata SX installed",
