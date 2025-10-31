@@ -52,6 +52,17 @@ const isSandbox = (domain: string) => {
   return false;
 };
 
+const getDomainNameFromDomain = (domain: string) => {
+  let domainName = domain.split('.')[0];
+
+  // Handle alternative .vf domain shape used by Apex pages
+  if (domainName.endsWith('--kimbleone')) {
+    domainName = domainName.split('--')[0];
+  }
+
+  return domainName;
+};
+
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
@@ -61,7 +72,7 @@ const getParamsFromUrl = (url?: string | null) => {
   if (url && url.length > 1) {
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
-    paramData.domainName = paramData.domain.split('.')[0];
+    paramData.domainName = getDomainNameFromDomain(paramData.domain);
     paramData.protocol = urlParts[0];
     paramData.baseUrl = paramData.protocol + '//' + paramData.domain;
     
