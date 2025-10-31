@@ -39,10 +39,6 @@ const ContextActions = ({ params }: ContextActionsProps) => {
 
   // Activity Assignment
   if (params?.sObject == 'KimbleOne__ActivityAssignment__c' && params?.recordId) {
-    const args = {
-      id: params.recordId,
-    };
-
     return (
       <div>
         <Button
@@ -50,7 +46,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
           action={() => navigate({
             type: 'apex',
             page: 'KimbleOne__ActivityAssignmentRates'
-          }, args)}
+          }, { id: params.recordId || null })}
         />
       </div>
     );
