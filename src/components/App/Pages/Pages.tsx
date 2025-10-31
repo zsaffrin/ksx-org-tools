@@ -12,6 +12,7 @@ const appTargets = [
 
 const apexPageTargets = [
   { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
+  { title: 'Jobs', target: { type: 'object', sObject: 'KimbleOne__Job__c' } },
   { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
   { title: 'Org-Wide Config', target: { type: 'apex', page: 'KimbleOne__ConfigurationSettings' } },
   { title: 'Scheduled Operations', target: { type: 'apex', page: 'KimbleOne__ScheduledOperations' } },
