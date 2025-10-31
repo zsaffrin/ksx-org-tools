@@ -56,6 +56,21 @@ const ContextActions = ({ params }: ContextActionsProps) => {
     );
   }
 
+  // Delivery Engagement
+  if (params?.sObject == 'KimbleOne__DeliveryGroup__c' && params?.recordId) {
+    return (
+      <div>
+        <Button
+          title='Expense Forecasting'
+          action={() => navigate({
+            type: 'apex',
+            page: 'KimbleOne__ActivityExpenseCategoryProfiles'
+          }, { id: params.recordId || null })}
+        />
+      </div>
+    );
+  }
+
   return null;
 };
 
