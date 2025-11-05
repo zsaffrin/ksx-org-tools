@@ -11,6 +11,7 @@ const appTargets = [
 ];
 
 const apexPageTargets = [
+  { title: 'Data Manager Dashboard', target: { type: 'n', page: 'KimbleOne__DataManagerDashboard' } },
   { title: 'Event Classes', target: { type: 'object', sObject: 'KimbleOne__EventClass__c' } },
   { title: 'Jobs', target: { type: 'object', sObject: 'KimbleOne__Job__c' } },
   { title: 'Job Administration', target: { type: 'apex', page: 'KimbleOne__JobAdministration' } },
