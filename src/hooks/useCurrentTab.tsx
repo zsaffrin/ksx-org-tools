@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 
 interface ChromeTabData {
+  id?: number | null,
   url?: string | null,
 };
 
 const useCurrentTab = () => {
-  const [currentTabData, setCurrentTabData] = useState<ChromeTabData | void>({});
+  const [currentTabData, setCurrentTabData] = useState<ChromeTabData>({});
   
   useEffect(() => {
     if (!currentTabData?.url || currentTabData.url.length < 1) {
