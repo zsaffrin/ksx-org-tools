@@ -1,8 +1,4 @@
-import { useEffect, useState } from 'react';
-
-interface ChromeTabData {
-  url?: string | null,
-};
+import useCurrentTab from './useCurrentTab';
 
 interface OneUrlBlobData {
   componentDef?: string | null,
@@ -144,32 +140,11 @@ const getParamsFromUrl = (url?: string | null) => {
 };
 
 const useUrlParams = () => {
-  const [currentTabData, setCurrentTabData] = useState<ChromeTabData | void>({});
-  const [paramData, setParamData] = useState<ParamData>({});
+  const tabData = useCurrentTab();
 
-  useEffect(() => {
-    if (!currentTabData?.url || currentTabData.url.length < 1) {
-      refreshTabData();
-    }
-  }, [currentTabData]);
-
-  const refreshTabData = async () => {
-    if (chrome && chrome.tabs) {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (!tabs || tabs.length < 1) {
-          return;
-        }
-        
-        const tabData = tabs[0];
-        setCurrentTabData(tabData);
-
-        const params = getParamsFromUrl(tabData?.url);
-        setParamData(params);
-      });
-    }
-  };
+  const params = tabData ? getParamsFromUrl(tabData.url) : {};
   
-  return paramData;
+  return params;
 };
 
 export default useUrlParams;
