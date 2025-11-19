@@ -1,8 +1,4 @@
-import { useEffect, useState } from 'react';
-
-interface ChromeTabData {
-  url?: string | null,
-};
+import useCurrentTab from './useCurrentTab';
 
 interface OneUrlBlobData {
   componentDef?: string | null,
@@ -52,6 +48,17 @@ const isSandbox = (domain: string) => {
   return false;
 };
 
+const getDomainNameFromDomain = (domain: string) => {
+  let domainName = domain.split('.')[0];
+
+  // Handle alternative .vf domain shape used by Apex pages
+  if (domainName.endsWith('--kimbleone')) {
+    domainName = domainName.split('--')[0];
+  }
+
+  return domainName;
+};
+
 const getParamsFromUrl = (url?: string | null) => {
   const paramData: ParamData = {
     url,
@@ -61,7 +68,7 @@ const getParamsFromUrl = (url?: string | null) => {
   if (url && url.length > 1) {
     const urlParts: string[] = url.split('/');
     paramData.domain = urlParts[2];
-    paramData.domainName = paramData.domain.split('.')[0];
+    paramData.domainName = getDomainNameFromDomain(paramData.domain);
     paramData.protocol = urlParts[0];
     paramData.baseUrl = paramData.protocol + '//' + paramData.domain;
     
@@ -133,32 +140,11 @@ const getParamsFromUrl = (url?: string | null) => {
 };
 
 const useUrlParams = () => {
-  const [currentTabData, setCurrentTabData] = useState<ChromeTabData | void>({});
-  const [paramData, setParamData] = useState<ParamData>({});
+  const tabData = useCurrentTab();
 
-  useEffect(() => {
-    if (!currentTabData?.url || currentTabData.url.length < 1) {
-      refreshTabData();
-    }
-  }, [currentTabData]);
-
-  const refreshTabData = async () => {
-    if (chrome && chrome.tabs) {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (!tabs || tabs.length < 1) {
-          return;
-        }
-        
-        const tabData = tabs[0];
-        setCurrentTabData(tabData);
-
-        const params = getParamsFromUrl(tabData?.url);
-        setParamData(params);
-      });
-    }
-  };
+  const params = tabData ? getParamsFromUrl(tabData.url) : {};
   
-  return paramData;
+  return params;
 };
 
 export default useUrlParams;
