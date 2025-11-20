@@ -15,6 +15,7 @@ interface ApexArgs {
 interface ParamData {
   apexArgs?: ApexArgs | null,
   apexPage?: string | null,
+  apexPageName?: string | null,
   baseUrl?: string | null,
   domain?: string | null,
   domainName?: string | null,
@@ -27,6 +28,7 @@ interface ParamData {
   protocol?: string | null,
   recordId?: string | null,
   sObject?: string | null,
+  sObjectName?: string | null,
   url?: string | null,
 };
 
@@ -85,11 +87,13 @@ const getParamsFromUrl = (url?: string | null) => {
       if (urlParts[4] == 'o') {
         paramData.pageType = 'object';
         paramData.sObject = urlParts[5];
+        paramData.sObjectName = paramData.sObject.replace('KimbleOne__', '').replace('__c', '');
       }
       if (urlParts[4] == 'r') {
         paramData.pageType = 'record';
         paramData.recordId = urlParts[6];
         paramData.sObject = urlParts[5];
+        paramData.sObjectName = paramData.sObject.replace('KimbleOne__', '').replace('__c', '');
       }
       if (urlParts[4] == 'setup') {
         paramData.pageType = 'setup';
@@ -106,6 +110,7 @@ const getParamsFromUrl = (url?: string | null) => {
           paramData.pageType = 'apex';
           const apexParts = oneAddressParts[4].split('?');
           paramData.apexPage = apexParts[0];
+          paramData.apexPageName = paramData.apexPage.replace('KimbleOne__', '');
           paramData.apexArgs = apexParts[1]?.split('&').reduce<ApexArgs>((acc, arg) => {
             const argParts = arg.split('=');
             return ({
@@ -123,6 +128,7 @@ const getParamsFromUrl = (url?: string | null) => {
       paramData.pageType = 'apex';
       const apexParts = urlParts[4].split('?');
       paramData.apexPage = apexParts[0];
+      paramData.apexPageName = paramData.apexPage.replace('KimbleOne__', '');
       paramData.apexArgs = apexParts[1]?.split('&').reduce<ApexArgs>((acc, arg) => {
         const argParts = arg.split('=');
         return ({
