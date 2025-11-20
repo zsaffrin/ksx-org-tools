@@ -29,7 +29,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
           title='threads=10'
           action={() => navigate({
             type: 'apex',
-            page: 'JobsPending',
+            page: 'KimbleOne__JobsPending',
             redirect: true
           }, args)}
         />
