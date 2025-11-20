@@ -6,11 +6,11 @@ const AppStateContext = createContext<AppStateContextType | null>(null);
 const AppStateProvider: FC<{
   children: ReactNode,
 }> = ({ children }) => {
-  const [isUnpackagedOrg, setIsUnpackagedOrg] = useState(false);
+  const [isUnpackagedOrg, setIsUnpackagedOrg] = useState<boolean>(false);
 
-  const toggleUnpackagedOrg = (val: boolean) => {
+  const toggleUnpackagedOrg = (val?: boolean) => {
     if (val) {
-      setIsUnpackagedOrg(val);
+      setIsUnpackagedOrg(!!val);
     } else {
       setIsUnpackagedOrg(!isUnpackagedOrg);
     }
