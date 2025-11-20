@@ -1,6 +1,9 @@
+interface ToggleFunction {
+  (val?: boolean): void,
+}
 type AppStateContextType = {
   isUnpackagedOrg?: boolean,
-  toggleUnpackagedOrg?: function,
+  toggleUnpackagedOrg?: ToggleFunction,
 };
 
 export {
