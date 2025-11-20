@@ -1,0 +1,5 @@
+.header-layout {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr max-content;
+}
