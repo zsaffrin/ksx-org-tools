@@ -1,3 +1,4 @@
+import useAppState from './useAppState';
 import useUrlParams from './useUrlParams';
 
 interface UrlArgs {
@@ -24,7 +25,14 @@ const argObjToUrlString = (argObject?: UrlArgs | null) => (
 );
 
 const useNav = () => {
+  const appState = useAppState();
   const params = useUrlParams();
+
+  const withNamespace = (val: string) => (
+    appState?.isUnpackagedOrg
+      ? val.replace('KimbleOne__', '')
+      : val
+  );
 
   const navigate = (
     targetData?: NavigateTargetData | null,
@@ -41,7 +49,7 @@ const useNav = () => {
 
     if (targetData?.type == 'record') {
       if (targetData?.sObject) {
-        urlParts.push('lightning', 'r', targetData.sObject, targetData.recordId, 'view');
+        urlParts.push('lightning', 'r', withNamespace(targetData.sObject), targetData.recordId, 'view');
       } else {
         urlParts.push(targetData.recordId);
       }
@@ -49,19 +57,19 @@ const useNav = () => {
 
     if (targetData?.type == 'object') {
       if (targetData?.sObject) {
-        urlParts.push('lightning', 'o', targetData.sObject, 'home');
+        urlParts.push('lightning', 'o', withNamespace(targetData.sObject), 'home');
       }
     }
 
     if (targetData?.type == 'apex') {
       if (targetData?.page) {
-        urlParts.push('apex', targetData.page);
+        urlParts.push('apex', withNamespace(targetData.page));
       }
     }
 
     if (targetData?.type == 'lightning') {
       if (targetData?.page) {
-        urlParts.push('lightning', 'page', targetData.page);
+        urlParts.push('lightning', 'page', withNamespace(targetData.page));
       }
     }
 
