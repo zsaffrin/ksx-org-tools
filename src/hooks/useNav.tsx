@@ -75,7 +75,7 @@ const useNav = () => {
 
     if (targetData?.type == 'n') {
       if (targetData?.page) {
-        urlParts.push('lightning', 'n', targetData.page);
+        urlParts.push('lightning', 'n', withNamespace(targetData.page));
       }
     }
 
