@@ -24,6 +24,7 @@ interface ParamData {
   oneBlob?: string | null,
   oneBlobDecoded?: OneUrlBlobData | null,
   pageType?: string | null,
+  pageName?: string | null,
   protocol?: string | null,
   recordId?: string | null,
   sObject?: string | null,
@@ -93,6 +94,7 @@ const getParamsFromUrl = (url?: string | null) => {
       }
       if (urlParts[4] == 'setup') {
         paramData.pageType = 'setup';
+        paramData.pageName = urlParts[5];
       }
     }
     if (urlParts[3] == 'one') {
