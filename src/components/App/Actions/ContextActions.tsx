@@ -83,12 +83,8 @@ const ContextActions = ({ params }: ContextActionsProps) => {
     const insertActionLinks = () => {
       const frames = document.querySelectorAll('iframe');
       for (const frame of frames) {
-        const frameDocument = frame.contentWindow?.document;
-        const rows = frameDocument?.querySelectorAll('tr.assignment-row') || [];
-        for (const row of rows) {
-          const actionCol = row.querySelector('.action-col');
-          actionCol?.append('A');
-        }
+        const rows = frame.contentWindow?.document.querySelectorAll('tr.assignment-row') || [];
+        console.info({ rows });
       }
     };
 
