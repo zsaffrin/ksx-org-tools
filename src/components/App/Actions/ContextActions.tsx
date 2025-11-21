@@ -28,7 +28,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   const [logCopyResult, setLogCopyResult] = useState<LogCopyResult | null>(null);
   
   // Job Administration > Pending Jobs runner
-  if (params?.apexPage == 'JobsPending') {
+  if (params?.apexPage?.includes('JobsPending')) {
     const args = {
       ...params.apexArgs,
       threads: 10,
@@ -49,7 +49,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   }
 
   // Activity Assignment
-  if (params?.sObject == 'KimbleOne__ActivityAssignment__c' && params?.recordId) {
+  if (params?.sObject?.includes('ActivityAssignment__c') && params?.recordId) {
     return (
       <div>
         <Button
@@ -64,7 +64,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   }
 
   // Delivery Engagement
-  if (params?.sObject == 'KimbleOne__DeliveryGroup__c' && params?.recordId) {
+  if (params?.sObject?.includes('DeliveryGroup__c') && params?.recordId) {
     return (
       <div>
         <Button
@@ -73,6 +73,37 @@ const ContextActions = ({ params }: ContextActionsProps) => {
             type: 'apex',
             page: 'KimbleOne__ActivityExpenseCategoryProfiles'
           }, { id: params.recordId || null })}
+        />
+      </div>
+    );
+  }
+
+  // Activity Assignment Gantt
+  if (params?.pageType == 'apex' && params?.apexPage?.includes('ActivityAssignmentsDelivery')) {
+    const insertActionLinks = () => {
+      const frames = document.querySelectorAll('iframe');
+      for (const frame of frames) {
+        const frameDocument = frame.contentWindow?.document;
+        const rows = frameDocument?.querySelectorAll('tr.assignment-row') || [];
+        for (const row of rows) {
+          const actionCol = row.querySelector('.action-col');
+          actionCol?.append('A');
+        }
+      }
+    };
+
+    const triggerInsertActionLinks = () => {
+      chrome.scripting.executeScript({
+        target: { tabId: currentTab.id || 0 },
+        func: insertActionLinks,
+      });
+    };
+    
+    return (
+      <div>
+        <Button
+          title='Show Assignment Links'
+          action={triggerInsertActionLinks}
         />
       </div>
     );
@@ -98,7 +129,6 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       };
 
       const triggerContentCopy = () => {
-        console.info(currentTab.id);
         chrome.scripting.executeScript({
           target: { tabId: currentTab.id || 0 },
           func: getLogContent,
