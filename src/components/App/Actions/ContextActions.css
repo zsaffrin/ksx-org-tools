@@ -1,0 +1,22 @@
+.log-copy {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-gap: var(--space-lg);
+}
+
+.log-copy-result {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  align-items: center;
+  grid-gap: var(--space-md);
+  font-size: 0.8em;
+}
+
+.log-copy-result.success {
+  color: var(--color-success);
+}
+
+.log-copy-result.error {
+  color: var(--color-error);
+}
