@@ -32,6 +32,7 @@ interface ParamData {
 };
 
 const supportedDomains: string[] = [
+  '.my.salesforce.com',
   '.force.com',
   '.salesforce-setup.com',
 ];
