@@ -112,10 +112,10 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       const getLogContent = async () => {
         const frame = document.querySelector('iframe');
         if (frame) {
-          return {
+          return ({
             type: 'success',
             content: frame.contentWindow?.document.querySelector('pre.codeBlock')?.textContent,
-          };
+          });
         } else {
           return ({
             type: 'error',
