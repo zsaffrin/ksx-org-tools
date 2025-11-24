@@ -79,31 +79,31 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   }
 
   // Activity Assignment Gantt
-  if (params?.pageType == 'apex' && params?.apexPage?.includes('ActivityAssignmentsDelivery')) {
-    const insertActionLinks = () => {
-      const frames = document.querySelectorAll('iframe');
-      for (const frame of frames) {
-        const rows = frame.contentWindow?.document.querySelectorAll('tr.assignment-row') || [];
-        console.info({ rows });
-      }
-    };
+  // if (params?.pageType == 'apex' && params?.apexPage?.includes('ActivityAssignmentsDelivery')) {
+  //   const insertActionLinks = () => {
+  //     const frames = document.querySelectorAll('iframe');
+  //     for (const frame of frames) {
+  //       const rows = frame.contentWindow?.document.querySelectorAll('tr.assignment-row') || [];
+  //       console.info({ rows });
+  //     }
+  //   };
 
-    const triggerInsertActionLinks = () => {
-      chrome.scripting.executeScript({
-        target: { tabId: currentTab.id || 0 },
-        func: insertActionLinks,
-      });
-    };
+  //   const triggerInsertActionLinks = () => {
+  //     chrome.scripting.executeScript({
+  //       target: { tabId: currentTab.id || 0 },
+  //       func: insertActionLinks,
+  //     });
+  //   };
     
-    return (
-      <div>
-        <Button
-          title='Show Assignment Links'
-          action={triggerInsertActionLinks}
-        />
-      </div>
-    );
-  }
+  //   return (
+  //     <div>
+  //       <Button
+  //         title='Show Assignment Links'
+  //         action={triggerInsertActionLinks}
+  //       />
+  //     </div>
+  //   );
+  // }
 
   // Setup pages
   if (params?.pageType == 'setup') {
@@ -117,10 +117,10 @@ const ContextActions = ({ params }: ContextActionsProps) => {
             content: frame.contentWindow?.document.querySelector('pre.codeBlock')?.textContent,
           };
         } else {
-          return {
+          return ({
             type: 'error',
             content: 'No iframe found',
-          };
+          });
         }
       };
 
