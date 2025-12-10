@@ -42,9 +42,9 @@ const useNav = () => {
     if (targetData?.type == 'custom') {
       urlParts.push(targetData.target);
     } else if (targetData?.maintainUrl) {
-      urlParts.push(params.baseUrl);
+      urlParts.push(withNamespace(params.baseUrl || ''));
     } else {
-      urlParts.push(params.homeUrl);
+      urlParts.push(withNamespace(params.homeUrl || ''));
     }
 
     if (targetData?.type == 'record') {
