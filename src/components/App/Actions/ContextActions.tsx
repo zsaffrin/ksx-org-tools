@@ -109,13 +109,21 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   if (params?.pageType == 'setup') {
     // Debug Log Detail
     if (params.pageName == 'ApexDebugLogDetail') {
-      const getLogContent = async () => {
+      const getLogContent = () => {
         const frame = document.querySelector('iframe');
         if (frame) {
-          return ({
-            type: 'success',
-            content: frame.contentWindow?.document.querySelector('pre.codeBlock')?.textContent,
-          });
+          try {
+            const textContent = frame.contentWindow?.document.querySelector('pre.codeBlock')?.textContent;
+            return ({
+              type: 'success',
+              content: textContent,
+            });
+          } catch (err) {
+            return ({
+              type: 'error',
+              content: JSON.stringify(err) || '',
+            });
+          }
         } else {
           return ({
             type: 'error',
