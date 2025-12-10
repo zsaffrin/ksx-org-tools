@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { FaDatabase, FaFile } from 'react-icons/fa';
+import { FaGear } from 'react-icons/fa6';
 import { AiFillLayout } from 'react-icons/ai';
 import { FaListUl } from 'react-icons/fa6';
 import { useUrlParams } from '../../../hooks';
@@ -22,6 +23,13 @@ const Info = () => {
     facts.push({
       icon: <FaDatabase title='Object' />,
       content: params.sObject,
+    });
+  }
+
+  if (params.pageType == 'setup') {
+    facts.push({
+      icon: <FaGear title='Setup' />,
+      content: params.pageName,
     });
   }
 

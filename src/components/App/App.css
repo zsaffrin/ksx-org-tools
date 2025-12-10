@@ -21,6 +21,8 @@ html {
   --space-xl: 2rem;
 
   --color-body-text: #322d44;
+  --color-success: #27ae60;
+  --color-error: #c0392b;
 }
 
 body {
