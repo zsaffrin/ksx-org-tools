@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { useCurrentTab, useNav } from '../../../hooks';
+import type { ReactNode } from 'react';
+import { useCurrentTab, useNav, useSOQLBuilder } from '../../../hooks';
 import { Button } from '../../ui';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import ContextActionSection from './ContextActionSection';
 import './ContextActions.css';
 
 interface ContextActionsProps {
@@ -25,7 +27,12 @@ interface LogCopyResult {
 const ContextActions = ({ params }: ContextActionsProps) => {
   const currentTab = useCurrentTab();
   const { navigate } = useNav();
+  const SOQLBuilder = useSOQLBuilder();
   const [logCopyResult, setLogCopyResult] = useState<LogCopyResult | null>(null);
+
+  const actionItems: ReactNode[] = [];
+  const pageItems: ReactNode[] = [];
+  const queryItems: ReactNode[] = [];
   
   // Job Administration > Pending Jobs runner
   if (params?.apexPage?.includes('JobsPending')) {
@@ -33,49 +40,72 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       ...params.apexArgs,
       threads: 10,
     };
-    
-    return (
-      <div>
-        <Button
-          title='threads=10'
-          action={() => navigate({
-            type: 'apex',
-            page: 'KimbleOne__JobsPending',
-            redirect: true
-          }, args)}
-        />
-      </div>
-    );
+
+    actionItems.push((
+      <Button
+        title='threads=10'
+        action={() => navigate({
+          type: 'apex',
+          page: 'KimbleOne__JobsPending',
+          redirect: true
+        }, args)}
+      />
+    ));
   }
 
   // Activity Assignment
   if (params?.sObject?.includes('ActivityAssignment__c') && params?.recordId) {
-    return (
-      <div>
-        <Button
-          title='Open Assignment Usage Pattern'
-          action={() => navigate({
-            type: 'apex',
-            page: 'KimbleOne__ActivityAssignmentRates'
-          }, { id: params.recordId || null })}
-        />
-      </div>
-    );
+    actionItems.push((
+      <Button
+        title='Open Assignment Usage Pattern'
+        action={() => navigate({
+          type: 'apex',
+          page: 'KimbleOne__ActivityAssignmentRates'
+        }, { id: params.recordId || null })}
+      />
+    ));
+    
+    {/* <div className='section-title'>Query Snippets</div>
+    <div>
+      <Button
+        title='Assignments on Engagement'
+        action={() => {
+          const soql = SOQLBuilder.getQueryForAssignmentsByEngagement(params.recordId);
+          navigator.clipboard.writeText(soql);
+        }}
+      />
+    </div> */}
   }
 
   // Delivery Engagement
   if (params?.sObject?.includes('DeliveryGroup__c') && params?.recordId) {
-    return (
-      <div>
-        <Button
-          title='Expense Forecasting'
-          action={() => navigate({
-            type: 'apex',
-            page: 'KimbleOne__ActivityExpenseCategoryProfiles'
-          }, { id: params.recordId || null })}
-        />
-      </div>
-    );
+    pageItems.push((
+      <Button
+        title='Expense Forecasting'
+        action={() => navigate({
+          type: 'apex',
+          page: 'KimbleOne__ActivityExpenseCategoryProfiles'
+        }, { id: params.recordId || null })}
+      />
+    ));
+
+    queryItems.push((
+      <Button
+        title='Assignments on Engagement'
+        action={() => {
+          const soql = SOQLBuilder.getQueryForAssignmentsByEngagement(params.recordId);
+          navigator.clipboard.writeText(soql);
+        }}
+      />
+    ), (
+      <Button
+        title='Time Entries on Engagement'
+        action={() => {
+          const soql = SOQLBuilder.getQueryForTimeEntriesByEngagement(params.recordId);
+          navigator.clipboard.writeText(soql);
+        }}
+      />
+    ));
   }
 
   // Setup pages
@@ -94,7 +124,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
           } catch (err) {
             return ({
               type: 'error',
-              content: JSON.stringify(err) || '',
+              content: JSON.stringify(err) || 'getLogContent generic catch',
             });
           }
         } else {
@@ -131,6 +161,7 @@ const ContextActions = ({ params }: ContextActionsProps) => {
         if (logCopyResult.type == 'error') {
           classString += ' error';
           icon = <FaTimesCircle />;
+          content = JSON.stringify(logCopyResult);
         }
         result = (
           <div className={classString}>
@@ -140,19 +171,22 @@ const ContextActions = ({ params }: ContextActionsProps) => {
         );
       }
       
-      return (
-        <div className='log-copy'>
-          <Button
-            title='Copy Log Content'
-            action={triggerContentCopy}
-          />
-          {result}
-        </div>
-      );
+      actionItems.push((
+        <Button
+          title='Copy Log Content'
+          action={triggerContentCopy}
+        />
+      ), result);
     }
   }
 
-  return null;
+  return (
+    <div className="context-actions-layout">
+      {actionItems.length > 0 && <ContextActionSection title='Actions' content={actionItems} />}
+      {pageItems.length > 0 && <ContextActionSection title='Pages' content={pageItems} />}
+      {queryItems.length > 0 && <ContextActionSection title='Query Snippets' content={queryItems} />}
+    </div>
+  );
 };
 
 export default ContextActions;
