@@ -64,17 +64,6 @@ const ContextActions = ({ params }: ContextActionsProps) => {
         }, { id: params.recordId || null })}
       />
     ));
-    
-    {/* <div className='section-title'>Query Snippets</div>
-    <div>
-      <Button
-        title='Assignments on Engagement'
-        action={() => {
-          const soql = SOQLBuilder.getQueryForAssignmentsByEngagement(params.recordId);
-          navigator.clipboard.writeText(soql);
-        }}
-      />
-    </div> */}
   }
 
   // Delivery Engagement
