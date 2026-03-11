@@ -180,13 +180,13 @@ const ContextActions = ({ params }: ContextActionsProps) => {
     }
   }
 
-  return (
+  return actionItems.length > 0 || pageItems.length > 0 || queryItems.length > 0 ? (
     <div className="context-actions-layout">
       {actionItems.length > 0 && <ContextActionSection title='Actions' content={actionItems} />}
       {pageItems.length > 0 && <ContextActionSection title='Pages' content={pageItems} />}
       {queryItems.length > 0 && <ContextActionSection title='Query Snippets' content={queryItems} />}
     </div>
-  );
+  ) : null;
 };
 
 export default ContextActions;
