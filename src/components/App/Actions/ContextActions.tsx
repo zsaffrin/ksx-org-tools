@@ -26,7 +26,7 @@ interface LogCopyResult {
 
 const ContextActions = ({ params }: ContextActionsProps) => {
   const currentTab = useCurrentTab();
-  const { navigate } = useNav();
+  const { buildUrl, navigate } = useNav();
   const SOQLBuilder = useSOQLBuilder();
   const [logCopyResult, setLogCopyResult] = useState<LogCopyResult | null>(null);
 
@@ -72,6 +72,10 @@ const ContextActions = ({ params }: ContextActionsProps) => {
       <Button
         title='Expense Forecasting'
         action={() => navigate({
+          type: 'apex',
+          page: 'KimbleOne__ActivityExpenseCategoryProfiles'
+        }, { id: params.recordId || null })}
+        withCopy={buildUrl({
           type: 'apex',
           page: 'KimbleOne__ActivityExpenseCategoryProfiles'
         }, { id: params.recordId || null })}
