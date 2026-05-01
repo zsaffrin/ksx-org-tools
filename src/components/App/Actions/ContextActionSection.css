@@ -1,0 +1,17 @@
+.context-action-section {
+  display: grid;
+  grid-gap: var(--space-sm);
+  padding: var(--space-sm);
+
+  .section-title {
+    font-weight: bold;
+    font-size: 0.85em;
+    padding: 0;
+  }
+
+  .section-content {
+    display: grid;
+    grid-gap: var(--space-sm);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

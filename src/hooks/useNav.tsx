@@ -38,7 +38,7 @@ const useNav = () => {
     targetData?: NavigateTargetData | null,
     args?: UrlArgs | null,
   ) => {
-    const urlParts = [];
+    let urlParts = [];
     if (targetData?.type == 'custom') {
       urlParts.push(targetData.target);
     } else if (targetData?.maintainUrl) {
@@ -63,7 +63,8 @@ const useNav = () => {
 
     if (targetData?.type == 'apex') {
       if (targetData?.page) {
-        urlParts.push('apex', withNamespace(targetData.page));
+        const apexUrlBase = `${params.protocol}//${params.domainName}--kimbleone.vf.force.com`;
+        urlParts = [apexUrlBase, 'one', 'one.app#', 'alohaRedirect', apexUrlBase, 'apex', targetData.page.replace('KimbleOne__', '')];
       }
     }
 
