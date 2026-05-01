@@ -34,6 +34,8 @@ const useNav = () => {
       : val
   );
 
+  const renderUrl = () => {};
+
   const navigate = (
     targetData?: NavigateTargetData | null,
     args?: UrlArgs | null,
