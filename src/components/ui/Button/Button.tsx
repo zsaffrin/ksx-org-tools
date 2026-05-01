@@ -1,3 +1,4 @@
+import { useAppState } from '../../../hooks';
 import { FaRegCopy } from 'react-icons/fa';
 import './Button.css';
 
@@ -13,6 +14,7 @@ interface ButtonProps {
 }
 
 const Button = ({ size, title, action, withCopy }: ButtonProps) => {
+  const appState = useAppState();
   const buttonClasses: string[] = ['button'];
 
   if (size == 'small') {
@@ -28,7 +30,7 @@ const Button = ({ size, title, action, withCopy }: ButtonProps) => {
       >
         {title}
       </button>
-      {withCopy && (
+      {withCopy && appState?.showCopyLinks && (
         <button
           className={buttonClasses.join(' ')}
           type='button'
