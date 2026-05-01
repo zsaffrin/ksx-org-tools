@@ -72,10 +72,10 @@ const getParamsFromUrl = (url?: string | null) => {
     paramData.domain = urlParts[2];
     paramData.domainName = getDomainNameFromDomain(paramData.domain);
     paramData.protocol = urlParts[0];
-    paramData.baseUrl = paramData.protocol + '//' + paramData.domain;
+    paramData.baseUrl = paramData.domain;
     
     paramData.isSandbox = isSandbox(paramData.domain);
-    paramData.homeUrl = paramData.protocol + '//' + paramData.domainName;
+    paramData.homeUrl = paramData.domainName;
     if (paramData.isSandbox) {
       paramData.homeUrl += '.sandbox';
     }
