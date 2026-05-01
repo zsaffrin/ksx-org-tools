@@ -67,7 +67,11 @@ const ContextActions = ({ params }: ContextActionsProps) => {
   }
 
   // Delivery Engagement
-  if (params?.sObject?.includes('DeliveryGroup__c') && params?.recordId) {
+  const isDeliveryEngagementDashboard: boolean = 
+    params?.sObject?.endsWith('DeliveryGroup__c') 
+    || params?.apexPage?.endsWith('DeliveryGroupDashboard') 
+      ? true : false;
+  if (isDeliveryEngagementDashboard && params?.recordId) {
     pageItems.push((
       <Button
         title='Expense Forecasting'
