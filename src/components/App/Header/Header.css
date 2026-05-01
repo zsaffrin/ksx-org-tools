@@ -1,6 +1,7 @@
 .header-layout {
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr max-content;
+  grid-template-columns: 1fr repeat(2, max-content);
+  grid-gap: var(--space-sm);
   cursor: pointer;
 }
