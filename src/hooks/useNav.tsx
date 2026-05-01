@@ -78,6 +78,16 @@ const useNav = () => {
     return urlParts;
   };
 
+  const buildNamedPageUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'n', withNamespace(page)
+    ];
+
+    return urlParts;
+  };
+
   const buildSettingsUrlParts = (
     page: string,
   ) => {
@@ -128,9 +138,8 @@ const useNav = () => {
     }
 
     if (data.type == 'n') {
-      if (data?.page) {
-        urlParts.push('lightning', 'n', withNamespace(data.page));
-      }
+      const parts = buildNamedPageUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
     if (data.type == 'settings') {
