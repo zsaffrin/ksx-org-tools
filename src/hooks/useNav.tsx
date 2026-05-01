@@ -34,61 +34,123 @@ const useNav = () => {
       : val
   );
 
-  const navigate = (
-    targetData?: NavigateTargetData | null,
-    args?: UrlArgs | null,
+  const buildRecordUrlParts = (
+    recordId: string,
+    sObject?: string | null,
   ) => {
-    const urlParts = [];
-    if (targetData?.type == 'custom') {
-      urlParts.push(targetData.target);
-    } else if (targetData?.maintainUrl) {
-      urlParts.push(withNamespace(params.baseUrl || ''));
+    const urlParts: string[] = [];
+
+    if (sObject) {
+      urlParts.push('lightning', 'r', withNamespace(sObject), recordId, 'view');
     } else {
-      urlParts.push(withNamespace(params.homeUrl || ''));
+      urlParts.push(recordId);
     }
 
-    if (targetData?.type == 'record') {
-      if (targetData?.sObject) {
-        urlParts.push('lightning', 'r', withNamespace(targetData.sObject), targetData.recordId, 'view');
-      } else {
-        urlParts.push(targetData.recordId);
-      }
+    return urlParts;
+  };
+
+  const buildObjectUrlParts = (
+    sObject: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'o', withNamespace(sObject), 'home'
+    ];
+    return urlParts;
+  };
+
+  const buildApexUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'one', 'one.app#', 'alohaRedirect', 'apex', withNamespace(page)
+    ];
+
+    return urlParts;
+  };
+
+  const buildLightningUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'page', withNamespace(page)
+    ];
+
+    return urlParts;
+  };
+
+  const buildNamedPageUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'n', withNamespace(page)
+    ];
+
+    return urlParts;
+  };
+
+  const buildSettingsUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'settings', 'personal', page, 'home'
+    ];
+
+    return urlParts;
+  };
+
+  const buildSetupUrlParts = (
+    page: string,
+  ) => {
+    const urlParts: string[] = [
+      'lightning', 'setup', page, 'home'
+    ];
+
+    return urlParts;
+  };
+
+  const buildUrl = (
+    data: NavigateTargetData,
+    args?: UrlArgs,
+  ) => {
+    let urlBase: string | null = params.homeUrl || null;
+    const urlParts: string[] = [];
+
+    if (data.type == 'record') {
+      urlBase = `${params.domainName}--kimbleone.vf.force.com`;
+      const parts = buildRecordUrlParts(data.recordId || '', data.sObject);
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'object') {
-      if (targetData?.sObject) {
-        urlParts.push('lightning', 'o', withNamespace(targetData.sObject), 'home');
-      }
+    if (data.type == 'object') {
+      const parts = buildObjectUrlParts(data.sObject || '');
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'apex') {
-      if (targetData?.page) {
-        urlParts.push('apex', withNamespace(targetData.page));
-      }
+    if (data.type == 'apex') {
+      urlBase = `${params.domainName}--kimbleone.vf.force.com`;
+      const parts = buildApexUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'lightning') {
-      if (targetData?.page) {
-        urlParts.push('lightning', 'page', withNamespace(targetData.page));
-      }
+    if (data.type == 'lightning') {
+      const parts = buildLightningUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'n') {
-      if (targetData?.page) {
-        urlParts.push('lightning', 'n', withNamespace(targetData.page));
-      }
+    if (data.type == 'n') {
+      const parts = buildNamedPageUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'settings') {
-      if (targetData?.page) {
-        urlParts.push('lightning', 'settings', 'personal', targetData.page, 'home');
-      }
+    if (data.type == 'settings') {
+      const parts = buildSettingsUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
-    if (targetData?.type == 'setup') {
-      if (targetData?.page) {
-        urlParts.push('lightning', 'setup', targetData.page, 'home');
-      }
+    if (data.type == 'setup') {
+      if (params.baseUrl) urlBase = params.baseUrl;
+      const parts = buildSetupUrlParts(data.page || '');
+      urlParts.push(...parts);
     }
 
     let urlPath = urlParts.join('/');
@@ -100,24 +162,38 @@ const useNav = () => {
       }
     }
 
-    if (targetData?.redirect) {
-      chrome.tabs.update({
-        url: urlPath,
-      });
-    } else {
-      window.open(urlPath);
-    }
+    const fullUrl = `${params.protocol}//${urlBase || params.domain}/${urlPath}`;
+
+    return fullUrl;
   };
 
-  const openExternal = (
-    target?: string | null,
+  const navigate = (
+    targetData?: NavigateTargetData | null,
+    args?: UrlArgs | null,
   ) => {
-    if (target) window.open(target);
+    if (!targetData) {
+      console.info('navigate call is missing targetData');
+      return;
+    }
+    
+    const targetUrl: string = targetData.type == 'custom'
+      ? targetData.target || ''
+      : buildUrl(targetData, args || undefined);
+
+    if (targetData?.redirect) {
+      chrome.tabs.update({
+        url: targetUrl,
+      });
+    } else if (!targetUrl) {
+      console.info('no targetUrl rendered');
+    } else {
+      window.open(targetUrl);
+    }
   };
   
   return {
+    buildUrl,
     navigate,
-    openExternal,
   };
 };
 

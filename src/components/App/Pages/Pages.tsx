@@ -31,7 +31,7 @@ const setupTargets = [
 ];
 
 const Pages = () => {
-  const { navigate } = useNav();
+  const { buildUrl, navigate } = useNav();
 
   const renderNodes = (
     targets: {
@@ -46,6 +46,7 @@ const Pages = () => {
     <Button
       title={title}
       action={() => target && navigate(target)}
+      withCopy={buildUrl(target)}
     />
   ));
   

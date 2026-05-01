@@ -1,3 +1,11 @@
+.context-actions-layout {
+  display: grid;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5em;
+  padding: var(--space-sm);
+  grid-gap: var(--space-md);
+}
+
 .log-copy {
   display: grid;
   grid-template-columns: max-content 1fr;

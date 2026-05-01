@@ -1,3 +1,5 @@
+import { useAppState } from '../../../hooks';
+import { FaRegCopy } from 'react-icons/fa';
 import './Button.css';
 
 interface ButtonProps {
@@ -7,9 +9,12 @@ interface ButtonProps {
   size?: string | null,
   /** The action to take when the Button is clicked */
   action?: () => null | void,
+  /** Toggle to include a secondary button to copy provided value to clipboard */
+  withCopy?: string | null,
 }
 
-const Button = ({ size, title, action }: ButtonProps) => {
+const Button = ({ size, title, action, withCopy }: ButtonProps) => {
+  const appState = useAppState();
   const buttonClasses: string[] = ['button'];
 
   if (size == 'small') {
@@ -17,13 +22,25 @@ const Button = ({ size, title, action }: ButtonProps) => {
   }
   
   return (
-    <button
-      className={buttonClasses.join(' ')}
-      type='button'
-      onClick={action}
-    >
-      {title}
-    </button>
+    <div className='button-wrap'>
+      <button
+        className={buttonClasses.join(' ')}
+        type='button'
+        onClick={action}
+      >
+        {title}
+      </button>
+      {withCopy && appState?.showCopyLinks && (
+        <button
+          className={buttonClasses.join(' ')}
+          type='button'
+          onClick={() => navigator.clipboard.writeText(withCopy)}
+        >
+          <FaRegCopy style={{ verticalAlign: 'middle'}}/>
+        </button>
+        
+      )}
+    </div>
   );
 };
 

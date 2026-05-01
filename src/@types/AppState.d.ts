@@ -4,6 +4,8 @@ interface ToggleFunction {
 type AppStateContextType = {
   isUnpackagedOrg?: boolean,
   toggleUnpackagedOrg?: ToggleFunction,
+  showCopyLinks?: boolean,
+  toggleShowCopyLinks?: ToggleFunction,
 };
 
 export {
