@@ -1,0 +1,151 @@
+import { useState } from 'react';
+import { useUrlParams } from '../../../hooks';
+import { Button } from '../../ui';
+import {
+  getApiHost,
+  getSessionId,
+  fetchApexLogs,
+  downloadApexLog,
+  formatLogSize,
+} from '../../../utilities';
+import type { ApexLogRecord } from '../../../utilities';
+import './ApexLogs.css';
+
+const ApexLogs = () => {
+  const params = useUrlParams();
+  const [logs, setLogs] = useState<ApexLogRecord[] | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [status, setStatus] = useState<string | null>(null);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
+
+  const apiHost = getApiHost(params.domainName, params.isSandbox);
+
+  const withSession = async (fn: (host: string, sid: string) => Promise<void>) => {
+    if (!apiHost) {
+      setStatus('Could not determine the org API domain from this tab.');
+      return;
+    }
+    setIsBusy(true);
+    setStatus(null);
+    try {
+      const sid = await getSessionId(apiHost);
+      if (!sid) {
+        setStatus(`No Salesforce session found for ${apiHost}. Open the org in this tab first.`);
+        return;
+      }
+      await fn(apiHost, sid);
+    } catch (err) {
+      setStatus(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsBusy(false);
+    }
+  };
+
+  const loadLogs = () => withSession(async (host, sid) => {
+    const records = await fetchApexLogs(host, sid);
+    setLogs(records);
+    setSelectedIds(new Set());
+    if (records.length < 1) {
+      setStatus('No debug logs found. Check that a trace flag is active for the user.');
+    }
+  });
+
+  const downloadSelected = () => withSession(async (host, sid) => {
+    const selected = (logs || []).filter((log) => selectedIds.has(log.Id));
+    for (const log of selected) {
+      await downloadApexLog(host, sid, log);
+    }
+    setStatus(`Saved ${selected.length} log${selected.length === 1 ? '' : 's'} to Downloads/apex-logs.`);
+  });
+
+  const toggleLog = (id: string) => {
+    const next = new Set(selectedIds);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    setSelectedIds(next);
+  };
+
+  const toggleAll = () => {
+    if (logs && selectedIds.size < logs.length) {
+      setSelectedIds(new Set(logs.map((log) => log.Id)));
+    } else {
+      setSelectedIds(new Set());
+    }
+  };
+
+  const formatStart = (value?: string | null) => {
+    if (!value) return '?';
+    const date = new Date(value);
+    if (isNaN(date.getTime())) return '?';
+    return date.toLocaleString(undefined, {
+      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    });
+  };
+
+  return (
+    <div>
+      <div className='section-title'>Apex Debug Logs</div>
+      <div className='apex-logs-controls'>
+        <Button
+          title={logs ? 'Refresh' : 'Load Logs'}
+          action={() => { if (!isBusy) loadLogs(); }}
+        />
+        {logs && logs.length > 0 && (
+          <Button
+            title={`Download Selected (${selectedIds.size})`}
+            action={() => { if (!isBusy && selectedIds.size > 0) downloadSelected(); }}
+          />
+        )}
+      </div>
+      {status && <div className='apex-logs-status'>{status}</div>}
+      {logs && logs.length > 0 && (
+        <table className='apex-logs-table'>
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type='checkbox'
+                  checked={selectedIds.size === logs.length}
+                  onChange={toggleAll}
+                />
+              </th>
+              <th>Start</th>
+              <th>User</th>
+              <th>Operation</th>
+              <th>Size</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((log) => (
+              <tr key={log.Id} onClick={() => toggleLog(log.Id)}>
+                <td>
+                  <input
+                    type='checkbox'
+                    checked={selectedIds.has(log.Id)}
+                    onChange={() => toggleLog(log.Id)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </td>
+                <td>{formatStart(log.StartTime)}</td>
+                <td>{log.LogUser?.Name || '?'}</td>
+                <td className='apex-logs-operation' title={log.Operation || ''}>
+                  {log.Operation || '?'}
+                </td>
+                <td>{formatLogSize(log.LogLength)}</td>
+                <td className='apex-logs-operation' title={log.Status || ''}>
+                  {log.Status || '?'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default ApexLogs;
