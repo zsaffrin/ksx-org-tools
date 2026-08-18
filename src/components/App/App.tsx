@@ -3,6 +3,7 @@ import { useUrlParams } from '../../hooks';
 import Header from './Header/Header';
 import Info from './Info/Info';
 import Actions from './Actions/Actions';
+import ApexLogs from './ApexLogs/ApexLogs';
 import Pages from './Pages/Pages';
 import Footer from './Footer/Footer';
 import './App.css';
@@ -19,6 +20,7 @@ const App = () => {
             <Info />
             <Actions />
             <Pages />
+            <ApexLogs />
           </>
         ) : (
           <div>Unsupported domain. You are probably not in a Salesforce org.</div>

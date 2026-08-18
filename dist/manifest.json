@@ -7,5 +7,6 @@
     "default_popup": "index.html",
     "default_title": "KSX Org Tools"
   },
-  "permissions": ["activeTab", "scripting", "tabs"]
+  "permissions": ["activeTab", "scripting", "tabs", "cookies", "downloads"],
+  "host_permissions": ["https://*.salesforce.com/*"]
 }

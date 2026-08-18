@@ -1,0 +1,41 @@
+.apex-logs-controls {
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+}
+
+.apex-logs-status {
+  color: var(--color-error);
+  padding: var(--space-sm);
+}
+
+.apex-logs-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  width: 100%;
+}
+
+.apex-logs-table th {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-thin) var(--space-sm);
+  text-align: left;
+}
+
+.apex-logs-table td {
+  padding: var(--space-thin) var(--space-sm);
+  white-space: nowrap;
+}
+
+.apex-logs-table tbody tr {
+  cursor: pointer;
+}
+
+.apex-logs-table tbody tr:hover {
+  background: rgba(129, 118, 178, 0.2);
+}
+
+.apex-logs-operation {
+  max-width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
