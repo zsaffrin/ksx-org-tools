@@ -5,8 +5,9 @@ import {
   fetchApexLogs,
   downloadApexLog,
   formatLogSize,
+  startUserTrace,
 } from './salesforceApi';
-import type { ApexLogRecord } from './salesforceApi';
+import type { ApexLogRecord, UserTraceResult } from './salesforceApi';
 
 export {
   isSalesforceRecordId,
@@ -15,5 +16,6 @@ export {
   fetchApexLogs,
   downloadApexLog,
   formatLogSize,
+  startUserTrace,
 };
-export type { ApexLogRecord };
+export type { ApexLogRecord, UserTraceResult };

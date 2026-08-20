@@ -7,6 +7,7 @@ import {
   fetchApexLogs,
   downloadApexLog,
   formatLogSize,
+  startUserTrace,
 } from '../../../utilities';
 import type { ApexLogRecord } from '../../../utilities';
 import './ApexLogs.css';
@@ -40,6 +41,22 @@ const ApexLogs = () => {
       setIsBusy(false);
     }
   };
+
+  const startTrace = () => withSession(async (host, sid) => {
+    const result = await startUserTrace(host, sid, 10);
+    const until = result.expiration.toLocaleTimeString(undefined, {
+      hour: '2-digit', minute: '2-digit',
+    });
+    const parts = [
+      `Trace ${result.traceExtended ? 'extended' : 'active'} on `
+      + `${result.userName || 'current user'} until ${until}`,
+    ];
+    if (result.debugLevelName) {
+      parts.push(`using debug level ${result.debugLevelName}`
+        + (result.debugLevelCreated ? ' (created)' : ''));
+    }
+    setStatus(`${parts.join(', ')}.`);
+  });
 
   const loadLogs = () => withSession(async (host, sid) => {
     const records = await fetchApexLogs(host, sid);
@@ -89,6 +106,10 @@ const ApexLogs = () => {
     <div>
       <div className='section-title'>Apex Debug Logs</div>
       <div className='apex-logs-controls'>
+        <Button
+          title='Trace Me (10 min)'
+          action={() => { if (!isBusy) startTrace(); }}
+        />
         <Button
           title={logs ? 'Refresh' : 'Load Logs'}
           action={() => { if (!isBusy) loadLogs(); }}
