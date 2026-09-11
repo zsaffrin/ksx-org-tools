@@ -6,6 +6,7 @@ import {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
 } from '../../../utilities';
@@ -18,6 +19,7 @@ const ApexLogs = () => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [confirmDeleteAll, setConfirmDeleteAll] = useState<boolean>(false);
 
   const apiHost = getApiHost(params.domainName, params.isSandbox);
 
@@ -75,6 +77,23 @@ const ApexLogs = () => {
     setStatus(`Saved ${selected.length} log${selected.length === 1 ? '' : 's'} to Downloads/apex-logs.`);
   });
 
+  const deleteAll = () => {
+    setConfirmDeleteAll(false);
+    return withSession(async (host, sid) => {
+      setStatus('Deleting logs\u2026');
+      const count = await deleteAllApexLogs(host, sid, (deleted, total) => {
+        setStatus(`Deleting logs\u2026 ${deleted} of ${total}`);
+      });
+      if (logs) {
+        setLogs([]);
+        setSelectedIds(new Set());
+      }
+      setStatus(count > 0
+        ? `Deleted ${count} log${count === 1 ? '' : 's'} from the org.`
+        : 'No debug logs to delete.');
+    });
+  };
+
   const toggleLog = (id: string) => {
     const next = new Set(selectedIds);
     if (next.has(id)) {
@@ -120,7 +139,29 @@ const ApexLogs = () => {
             action={() => { if (!isBusy && selectedIds.size > 0) downloadSelected(); }}
           />
         )}
+        {confirmDeleteAll ? (
+          <>
+            <Button
+              title='Confirm: Delete All'
+              action={() => { if (!isBusy) deleteAll(); }}
+            />
+            <Button
+              title='Cancel'
+              action={() => setConfirmDeleteAll(false)}
+            />
+          </>
+        ) : (
+          <Button
+            title='Delete All Logs'
+            action={() => { if (!isBusy) setConfirmDeleteAll(true); }}
+          />
+        )}
       </div>
+      {confirmDeleteAll && (
+        <div className='apex-logs-status'>
+          This deletes every Apex debug log in the org, for all users. Continue?
+        </div>
+      )}
       {status && <div className='apex-logs-status'>{status}</div>}
       {logs && logs.length > 0 && (
         <table className='apex-logs-table'>

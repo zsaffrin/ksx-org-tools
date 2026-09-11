@@ -4,6 +4,7 @@ import {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
 } from './salesforceApi';
@@ -15,6 +16,7 @@ export {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
 };

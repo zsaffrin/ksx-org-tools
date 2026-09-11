@@ -286,6 +286,55 @@ const downloadApexLog = async (
   }
 };
 
+/** Collect every ApexLog Id in the org, following query pagination. */
+const fetchAllApexLogIds = async (apiHost: string, sid: string): Promise<string[]> => {
+  const ids: string[] = [];
+  let path: string | null = (
+    `/services/data/${API_VERSION}/tooling/query/?q=${encodeURIComponent('SELECT Id FROM ApexLog')}`
+  );
+  while (path) {
+    const response = await apiRequest(apiHost, sid, path);
+    const data = await response.json();
+    ids.push(...((data.records || []) as { Id: string }[]).map((record) => record.Id));
+    path = data.done ? null : (data.nextRecordsUrl || null);
+  }
+  return ids;
+};
+
+const DELETE_CONCURRENCY = 5;
+
+/** Delete every ApexLog in the org (all users). Deletes run a few at a time;
+ *  onProgress is called after each successful delete. Returns the count deleted. */
+const deleteAllApexLogs = async (
+  apiHost: string,
+  sid: string,
+  onProgress?: (deleted: number, total: number) => void,
+): Promise<number> => {
+  const ids = await fetchAllApexLogIds(apiHost, sid);
+  let deleted = 0;
+  let nextIndex = 0;
+
+  const worker = async () => {
+    while (nextIndex < ids.length) {
+      const id = ids[nextIndex];
+      nextIndex += 1;
+      await apiRequest(
+        apiHost, sid,
+        `/services/data/${API_VERSION}/tooling/sobjects/ApexLog/${id}`,
+        'application/json',
+        { method: 'DELETE' },
+      );
+      deleted += 1;
+      onProgress?.(deleted, ids.length);
+    }
+  };
+
+  await Promise.all(
+    Array.from({ length: Math.min(DELETE_CONCURRENCY, ids.length) }, worker),
+  );
+  return deleted;
+};
+
 const formatLogSize = (numBytes?: number | null) => {
   if (numBytes == null) return '?';
   if (numBytes >= 1024 * 1024) return `${(numBytes / (1024 * 1024)).toFixed(1)}M`;
@@ -299,6 +348,7 @@ export {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
 };
