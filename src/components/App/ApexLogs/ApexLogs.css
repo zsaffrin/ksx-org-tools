@@ -39,3 +39,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.apex-logs-pager {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  gap: var(--space-md);
+  justify-content: center;
+  padding: var(--space-sm);
+}

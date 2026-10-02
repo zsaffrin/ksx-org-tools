@@ -1,9 +1,9 @@
 const API_VERSION = 'v61.0';
 
-const APEX_LOG_QUERY = (limit: number) => (
+const APEX_LOG_QUERY = (
   'SELECT Id, LogUser.Name, Operation, Application, Status, LogLength, '
   + 'StartTime, Request, DurationMilliseconds '
-  + `FROM ApexLog ORDER BY StartTime DESC LIMIT ${limit}`
+  + 'FROM ApexLog ORDER BY StartTime DESC'
 );
 
 interface ApexLogRecord {
@@ -84,12 +84,31 @@ const toolingQuery = async (
   return data.records || [];
 };
 
+/** Run a tooling query and collect every record, following query pagination. */
+const toolingQueryAll = async (
+  apiHost: string,
+  sid: string,
+  soql: string,
+) => {
+  const records = [];
+  let path: string | null = (
+    `/services/data/${API_VERSION}/tooling/query/?q=${encodeURIComponent(soql)}`
+  );
+  while (path) {
+    const response = await apiRequest(apiHost, sid, path);
+    const data = await response.json();
+    records.push(...(data.records || []));
+    path = data.done ? null : (data.nextRecordsUrl || null);
+  }
+  return records;
+};
+
+/** Every ApexLog in the org, newest first. */
 const fetchApexLogs = async (
   apiHost: string,
   sid: string,
-  limit = 30,
 ): Promise<ApexLogRecord[]> => (
-  toolingQuery(apiHost, sid, APEX_LOG_QUERY(limit))
+  toolingQueryAll(apiHost, sid, APEX_LOG_QUERY)
 );
 
 // Debug level required for KSX debugging, per "Capturing Debug Logs"
@@ -286,31 +305,16 @@ const downloadApexLog = async (
   }
 };
 
-/** Collect every ApexLog Id in the org, following query pagination. */
-const fetchAllApexLogIds = async (apiHost: string, sid: string): Promise<string[]> => {
-  const ids: string[] = [];
-  let path: string | null = (
-    `/services/data/${API_VERSION}/tooling/query/?q=${encodeURIComponent('SELECT Id FROM ApexLog')}`
-  );
-  while (path) {
-    const response = await apiRequest(apiHost, sid, path);
-    const data = await response.json();
-    ids.push(...((data.records || []) as { Id: string }[]).map((record) => record.Id));
-    path = data.done ? null : (data.nextRecordsUrl || null);
-  }
-  return ids;
-};
-
 const DELETE_CONCURRENCY = 5;
 
-/** Delete every ApexLog in the org (all users). Deletes run a few at a time;
- *  onProgress is called after each successful delete. Returns the count deleted. */
-const deleteAllApexLogs = async (
+/** Delete the given ApexLogs. Deletes run a few at a time; onProgress is
+ *  called after each successful delete. Returns the count deleted. */
+const deleteApexLogs = async (
   apiHost: string,
   sid: string,
+  ids: string[],
   onProgress?: (deleted: number, total: number) => void,
 ): Promise<number> => {
-  const ids = await fetchAllApexLogIds(apiHost, sid);
   let deleted = 0;
   let nextIndex = 0;
 
@@ -335,6 +339,16 @@ const deleteAllApexLogs = async (
   return deleted;
 };
 
+/** Delete every ApexLog in the org (all users). Returns the count deleted. */
+const deleteAllApexLogs = async (
+  apiHost: string,
+  sid: string,
+  onProgress?: (deleted: number, total: number) => void,
+): Promise<number> => {
+  const records: { Id: string }[] = await toolingQueryAll(apiHost, sid, 'SELECT Id FROM ApexLog');
+  return deleteApexLogs(apiHost, sid, records.map((record) => record.Id), onProgress);
+};
+
 const formatLogSize = (numBytes?: number | null) => {
   if (numBytes == null) return '?';
   if (numBytes >= 1024 * 1024) return `${(numBytes / (1024 * 1024)).toFixed(1)}M`;
@@ -348,6 +362,7 @@ export {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteApexLogs,
   deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
