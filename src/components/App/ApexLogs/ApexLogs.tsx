@@ -6,6 +6,7 @@ import {
   getSessionId,
   fetchApexLogs,
   downloadApexLog,
+  deleteApexLogs,
   deleteAllApexLogs,
   formatLogSize,
   startUserTrace,
@@ -13,13 +14,16 @@ import {
 import type { ApexLogRecord } from '../../../utilities';
 import './ApexLogs.css';
 
+const PAGE_SIZE = 25;
+
 const ApexLogs = () => {
   const params = useUrlParams();
   const [logs, setLogs] = useState<ApexLogRecord[] | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState<boolean>(false);
-  const [confirmDeleteAll, setConfirmDeleteAll] = useState<boolean>(false);
+  const [confirmDelete, setConfirmDelete] = useState<'all' | 'selected' | null>(null);
+  const [page, setPage] = useState<number>(0);
 
   const apiHost = getApiHost(params.domainName, params.isSandbox);
 
@@ -64,6 +68,7 @@ const ApexLogs = () => {
     const records = await fetchApexLogs(host, sid);
     setLogs(records);
     setSelectedIds(new Set());
+    setPage(0);
     if (records.length < 1) {
       setStatus('No debug logs found. Check that a trace flag is active for the user.');
     }
@@ -77,8 +82,22 @@ const ApexLogs = () => {
     setStatus(`Saved ${selected.length} log${selected.length === 1 ? '' : 's'} to Downloads/apex-logs.`);
   });
 
+  const deleteSelected = () => {
+    setConfirmDelete(null);
+    const ids = Array.from(selectedIds);
+    return withSession(async (host, sid) => {
+      setStatus('Deleting logs\u2026');
+      const count = await deleteApexLogs(host, sid, ids, (deleted, total) => {
+        setStatus(`Deleting logs\u2026 ${deleted} of ${total}`);
+      });
+      setLogs((logs || []).filter((log) => !selectedIds.has(log.Id)));
+      setSelectedIds(new Set());
+      setStatus(`Deleted ${count} log${count === 1 ? '' : 's'} from the org.`);
+    });
+  };
+
   const deleteAll = () => {
-    setConfirmDeleteAll(false);
+    setConfirmDelete(null);
     return withSession(async (host, sid) => {
       setStatus('Deleting logs\u2026');
       const count = await deleteAllApexLogs(host, sid, (deleted, total) => {
@@ -87,6 +106,7 @@ const ApexLogs = () => {
       if (logs) {
         setLogs([]);
         setSelectedIds(new Set());
+        setPage(0);
       }
       setStatus(count > 0
         ? `Deleted ${count} log${count === 1 ? '' : 's'} from the org.`
@@ -102,14 +122,26 @@ const ApexLogs = () => {
       next.add(id);
     }
     setSelectedIds(next);
+    setConfirmDelete(null);
   };
 
-  const toggleAll = () => {
-    if (logs && selectedIds.size < logs.length) {
-      setSelectedIds(new Set(logs.map((log) => log.Id)));
-    } else {
-      setSelectedIds(new Set());
+  const pageCount = Math.max(1, Math.ceil((logs?.length || 0) / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageLogs = (logs || []).slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
+  const pageAllSelected = pageLogs.length > 0 && pageLogs.every((log) => selectedIds.has(log.Id));
+
+  /** Header checkbox selects or clears the logs on the current page only. */
+  const togglePage = () => {
+    const next = new Set(selectedIds);
+    for (const log of pageLogs) {
+      if (pageAllSelected) {
+        next.delete(log.Id);
+      } else {
+        next.add(log.Id);
+      }
     }
+    setSelectedIds(next);
+    setConfirmDelete(null);
   };
 
   const formatStart = (value?: string | null) => {
@@ -139,27 +171,40 @@ const ApexLogs = () => {
             action={() => { if (!isBusy && selectedIds.size > 0) downloadSelected(); }}
           />
         )}
-        {confirmDeleteAll ? (
+        {confirmDelete ? (
           <>
             <Button
-              title='Confirm: Delete All'
-              action={() => { if (!isBusy) deleteAll(); }}
+              title={confirmDelete == 'selected'
+                ? `Confirm: Delete Selected (${selectedIds.size})`
+                : 'Confirm: Delete All'}
+              action={() => {
+                if (isBusy) return;
+                if (confirmDelete == 'selected') {
+                  deleteSelected();
+                } else {
+                  deleteAll();
+                }
+              }}
             />
             <Button
               title='Cancel'
-              action={() => setConfirmDeleteAll(false)}
+              action={() => setConfirmDelete(null)}
             />
           </>
         ) : (
           <Button
-            title='Delete All Logs'
-            action={() => { if (!isBusy) setConfirmDeleteAll(true); }}
+            title={selectedIds.size > 0 ? `Delete Selected (${selectedIds.size})` : 'Delete All Logs'}
+            action={() => {
+              if (!isBusy) setConfirmDelete(selectedIds.size > 0 ? 'selected' : 'all');
+            }}
           />
         )}
       </div>
-      {confirmDeleteAll && (
+      {confirmDelete && (
         <div className='apex-logs-status'>
-          This deletes every Apex debug log in the org, for all users. Continue?
+          {confirmDelete == 'selected'
+            ? `This deletes the ${selectedIds.size} selected log${selectedIds.size === 1 ? '' : 's'} from the org. Continue?`
+            : 'This deletes every Apex debug log in the org, for all users. Continue?'}
         </div>
       )}
       {status && <div className='apex-logs-status'>{status}</div>}
@@ -170,8 +215,8 @@ const ApexLogs = () => {
               <th>
                 <input
                   type='checkbox'
-                  checked={selectedIds.size === logs.length}
-                  onChange={toggleAll}
+                  checked={pageAllSelected}
+                  onChange={togglePage}
                 />
               </th>
               <th>Start</th>
@@ -182,7 +227,7 @@ const ApexLogs = () => {
             </tr>
           </thead>
           <tbody>
-            {logs.map((log) => (
+            {pageLogs.map((log) => (
               <tr key={log.Id} onClick={() => toggleLog(log.Id)}>
                 <td>
                   <input
@@ -205,6 +250,25 @@ const ApexLogs = () => {
             ))}
           </tbody>
         </table>
+      )}
+      {logs && logs.length > 0 && (
+        <div className='apex-logs-pager'>
+          <Button
+            size='small'
+            title='Prev'
+            action={() => { if (currentPage > 0) setPage(currentPage - 1); }}
+          />
+          <span>
+            Page {currentPage + 1} of {pageCount}
+            {' \u00b7 '}
+            {currentPage * PAGE_SIZE + 1}\u2013{currentPage * PAGE_SIZE + pageLogs.length} of {logs.length} logs
+          </span>
+          <Button
+            size='small'
+            title='Next'
+            action={() => { if (currentPage < pageCount - 1) setPage(currentPage + 1); }}
+          />
+        </div>
       )}
     </div>
   );
